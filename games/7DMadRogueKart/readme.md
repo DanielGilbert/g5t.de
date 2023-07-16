@@ -25,11 +25,18 @@ After starting the game, you are thrown into the player selection mode, where yo
 
 ## Config
 The root folder inclues a `config.ini`, where some settings can be changed: 
-| Setting | Default Value | Comment |
-|---|---|---|
-| ResolutionWidth | 1280 | - |
-| ResolutionHeight | 720 | - |
-| EnableVSync | true | - |
-| Mod | default | - |
-| Seed | -1 | When set to `-1`, the total amount of seconds that have been passed since midnight are being used as the seed. |
-| MapSize | 128 | I would rather not recommend messing with that setting... But I won't stop you, either. :) |
++---------+---------+
+| Header  | Header  |
+| Column1 | Column2 |
++=========+=========+
+| 1. ab   | > This is a quote
+| 2. cde  | > For the second column 
+| 3. f    |
++---------+---------+
+| Second row spanning
+| on two columns
++---------+---------+
+| Back    |         |
+| to      |         |
+| one     |         |
+| column  |         | 
