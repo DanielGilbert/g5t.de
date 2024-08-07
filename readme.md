@@ -5,4 +5,4 @@ I'm Daniel, and this is my tiny website. I'm a programmer by day, and a maker, t
 
 Have fun!
 
-[Twitter](https://twitter.com/AdmiralVanTweet) | [GitHub](https://github.com/DanielGilbert) | [LinkedIn](https://www.linkedin.com/in/daniel-gilbert-0a334abb/)
+[GitHub](https://github.com/DanielGilbert) | [LinkedIn](https://www.linkedin.com/in/daniel-gilbert-0a334abb/)
