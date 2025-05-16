@@ -3,19 +3,19 @@
 <head>
     <title>A spiffy title!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-    <meta name="description" content="This is a spiffy article. You should read it.">
-    <link rel="stylesheet" href="index.css">
+    <meta name="description" content="An article about the website.">
+    <link rel="stylesheet" href="../index.css">
 </head>
-<body>
-    <blog-header published="2024-08-17">
-        <img src="image.jpeg" alt="Another AI image" loading="lazy" />
-        <h2>A spiffy title!</h2>
-        <p class="byline" aria-label="author">Malkovich</p>
-    </blog-header>
+<body class="container">
+    <x-article-header published="2025-05-15" updated="2025-05-16">
+        <img src="./website-barbara-the-builder.jpg" alt="A woman rebuilding a website" loading="lazy" />
+        <h2>Rebuild the Website</h2>
+        <p class="byline" aria-label="author">Daniel Gilbert</p>
+    </x-article-header>
     <main>
-        Article text goes here ...
+        <p>Yes, this your fancy article! Go for it!</p>
     </main>
-    <blog-footer mastodon-url="https://example.com/@jmalkovich/12345"></blog-footer>
-    <script type="module" src="index.js"></script>
+    <x-website-footer></x-website-footer>
+    <script type="module" src="../index.js"></script>
 </body>
 </html>
