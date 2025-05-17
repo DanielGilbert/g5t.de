@@ -1,8 +1,8 @@
-import { registerHeaderContent } from "./components/header-content/header-content.js";
+import { registerWebsiteHeader } from "./components/website-header/website-header.js";
 import { registerWebsiteFooter } from "./../components/website-footer/website-footer.js";
 
 const app = async () => {
-    registerHeaderContent();
+    registerWebsiteHeader();
     registerWebsiteFooter();
 }
 

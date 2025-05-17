@@ -12,17 +12,8 @@
 </head>
 <body class="container">
     <header>
-        <h1>g[ilber]t.de</h1>
-        <nav>
-            <ol>
-                <li><a href="../index.html">Welcome</a></li>
-                <li>Articles</li>
-                <li><a href="./../tools/">Tools</a></li>
-                <li><a href="./../games/">Games</a></li>
-            </ol>
-        </nav>
+        <x-website-header currentPage="articles"></x-website-header>
     </header>
-
     <main>
         <section>
             <h2>
@@ -35,16 +26,14 @@
                 May
             </h4>
             <ul>
-                <li>[2025-05-15]&NonBreakingSpace;<a href="./2025-05-15-rebuild-the-website/index.html">Rebuild the Website</a></li>
+                <li>15th:&NonBreakingSpace;<a href="./20250515-rebuild-the-website/index.html">Rebuild the Website</a></li>
             </ul>
-            <h4>
-                April
-            </h4>
         </section>
     </main>
 
-    <x-website-footer></x-website-footer>
-
+    <footer>
+        <x-website-footer></x-website-footer>
+    </footer>
     <script type="module" src="./index.js"></script>
 </body>
 </html>
