@@ -1,6 +1,2 @@
 @import url("../index.css");
-
-.byline {
-    font-size: 0.8em;
-    font-style: italic;
-}
+@import url("./components/article-metalines/article-metaline.css");

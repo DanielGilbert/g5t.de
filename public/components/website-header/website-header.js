@@ -3,8 +3,6 @@ import { html } from '../../lib/html.js';
 class WebsiteHeader extends HTMLElement {
     connectedCallback() {
         const title = this.getAttribute('title') || 'g[ilber]t.de';
-        const published = this.getAttribute('published');
-        const updated = this.getAttribute('updated');
         const welcomeLink = this.getAttribute('welcomeLink');
         const articlesLink = this.getAttribute('articlesLink');
         const toolsLink = this.getAttribute('toolsLink');
@@ -23,19 +21,6 @@ class WebsiteHeader extends HTMLElement {
                     <li>${gamesLink ? html`<a href="${gamesLink}">Games</a>` : html`Games` }</li>
                 </ul>
             </nav>
-            ${published ? html`
-                    <time datetime="${published}">
-                        ${new Date(published).toDateString({ dateStyle: 'long' })}
-                    </time>
-                ` : ''}
-            ${updated ? html`
-            <small>
-                Last updated:
-                <time datetime="${updated}">
-                    ${new Date(updated).toDateString({ dateStyle: 'long' })}
-                </time>
-            </small>
-            ` : ''}
         </header>`;
         this.insertBefore(template.content, this.firstChild);
     }

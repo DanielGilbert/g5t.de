@@ -8,13 +8,17 @@
 </head>
 <body class="container">
     <header>
-        <x-website-header published="2025-05-15" updated="2025-05-17">
-            <img src="./website-barbara-the-builder.jpg" alt="A woman rebuilding a website. AI generated." loading="lazy" />
+        <x-website-header 
+            welcomeLink="../../index.html"
+            articlesLink="../../articles/"
+            toolsLink="../../tools/"
+            gamesLink="../../games/">
+            <figure><img src="./website-barbara-the-builder.jpg" loading="lazy" /><figcaption>A woman ridicously pictured rebuilding a website. AI generated.</figcaption></figure>
         </x-website-header>
     </header>
     <main>
         <h2>Rebuild the Website</h2>
-        <p class="byline" aria-label="author">Daniel Gilbert</p>
+        <x-article-metalines published="2025-05-17" author="Daniel Gilbert"></x-article-metalines>
         <p>Yes, this your fancy article! Go for it!</p>
     </main>
     <x-website-footer></x-website-footer>
