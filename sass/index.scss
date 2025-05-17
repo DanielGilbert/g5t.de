@@ -1,5 +1,25 @@
 // Pico lightweight version
 @use "pico" with (
+  $enable-semantic-container: true,
+  $enable-classes: false,
+  $modules: (
+    "content/code": false,
+    "forms/input-color": false,
+    "forms/input-date": false,
+    "forms/input-file": false,
+    "forms/input-range": false,
+    "forms/input-search": false,
+    "components/accordion": false,
+    "components/card": true,
+    "components/dropdown": false,
+    "components/loading": false,
+    "components/modal": false,
+    "components/nav": true,
+    "components/progress": false,
+    "components/tooltip": false,
+    "utilities/accessibility": false,
+    "utilities/reduce-motion": false
+  ),
   $breakpoints:
     (
       // Small (landscape phones)
@@ -22,7 +42,7 @@
       // Font size: 19px
       lg: (
           breakpoint: 1024px,
-          viewport: 950px,
+          viewport: 850px,
           root-font-size: 118.75%,
         ),
 
@@ -30,7 +50,7 @@
       // Font size: 20px
       xl: (
           breakpoint: 1280px,
-          viewport: 950px,
+          viewport: 850px,
           root-font-size: 118.75%,
         ),
 
@@ -38,7 +58,7 @@
       // Font size: 21px
       xxl: (
           breakpoint: 1536px,
-          viewport: 950px,
+          viewport: 850px,
           root-font-size: 118.75%,
         )
     )

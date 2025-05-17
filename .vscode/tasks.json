@@ -7,7 +7,7 @@
     {
       "label": "Sass Compile",
       "type": "shell",
-      "command": "sass --load-path=node_modules/@picocss/pico/scss/ sass/index.scss public/pico.css",
+      "command": "sass --load-path=node_modules/@picocss/pico/scss/ sass/index.scss public/styles/pico.css",
       "group": "build"
     }
   ]
