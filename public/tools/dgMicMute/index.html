@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>dgMicMute | g5t.de</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="My personal private page.">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="stylesheet" href="./../index.css">
+    <link rel="canonical" href="https://g5t.de/tools/dgMiceMute/index.html" />
+</head>
+<body class="container">
+    <header>
+        <x-website-header
+            welcomeLink="../../index.html"
+            articlesLink="../../articles/"
+            toolsLink="../../tools/"
+            gamesLink="../../games/">
+        </x-website-header>
+    </header>
+    <main>
+        <section>
+            <h2>dgMicMute</h2>
+
+            <p>This is a tool which allows you to mute your microphone in a convenient way.</p>
+
+            <h3>History</h3>
+            <p>One day, a co-worker asked if someone knows a small tool, which allows him to mute his microphone, like he can mute the audio.
+            We were a little bit confused, because no one knows such a tool. However, most (if not all) Ultrabooks or Notebooks have a microphone equipped.
+            So I decided to write this little tool.</p>
+
+            <p>It resides in the notification area as a microfone symbol (keep in mind to make it visible, it's normally hidden). With a simple right-click, you can (un-)mute your microphone.
+            It even has a *force-mode*, where it tries to prevent other applications from re-enabling the microphone (E.g. Skype does this. NSA might do it. :P).</p>
+
+            <h3>Features</h3>
+            <ul>
+                <li>Mutes your microphone with a single left-click (on the icon)</li>
+                <li>Adds a "force"-flag so that third party applications cannot "unmute" the microphone</li>
+                <li>Hotkey! (Thanks <a href="https://github.com/sco3tt">sco3tt</a>!)</li>
+                <li>Audible notification when switching the state! (Thanks <a href="https://github.com/AngryJKirk">AngryJKirk</a>!)</li>
+            </ul>
+
+            <h3>Binaries</h3>
+            <p>If you came here by accident, and don't want the source, but rather precompiled binaries, head over to <a href="https://github.com/DanielGilbert/dgMicMute/releases">the Releases</a>. You might want to pick the topmost release.
+            You can also just download the .exe that is provided <a href="./dgMicMuteSetup.exe">here</a>.</p>
+
+            <h3>FAQ</h3>
+            <h4>I cannot find the microphone icon!</h4>
+            <p>It's located in the lower right part of the Windows taskbar. Depending on your settings, you might need to press the "^"-arrow that's next to the symbols.</p>
+            <h4>Where do I set the hotkey?</h4>
+            <p>Simply right-click on the icon, select "Settings..." and pick your Hotkey in the Settings.</p>
+            <h4>Where do I set the autostart?</h4>
+            <p>Simply right-click on the icon, select "Settings..." and activate Autostart.</p>
+
+            <h3>Thanks</h3>
+            <ul>
+                <li>Icon made by Stephen Hutchings from <a href="https://flaticon.com">Flaticon.com</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <x-website-footer></x-website-footer>
+
+    <script type="module" src="./../index.js"></script>
+</body>
+</html>

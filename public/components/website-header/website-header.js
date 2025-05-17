@@ -5,7 +5,10 @@ class WebsiteHeader extends HTMLElement {
         const title = this.getAttribute('title') || 'g[ilber]t.de';
         const published = this.getAttribute('published');
         const updated = this.getAttribute('updated');
-        const currentPage = this.getAttribute('currentPage');
+        const welcomeLink = this.getAttribute('welcomeLink');
+        const articlesLink = this.getAttribute('articlesLink');
+        const toolsLink = this.getAttribute('toolsLink');
+        const gamesLink = this.getAttribute('gamesLink');
         const template = document.createElement('template');
         template.innerHTML = html`
         <header>
@@ -14,10 +17,10 @@ class WebsiteHeader extends HTMLElement {
                     <li><h1>${title}</h1></li>
                 </ul> 
                 <ul>
-                    <li><a href="${import.meta.resolve('../../../index.html')}">Welcome</a></li>
-                    <li>${currentPage === 'articles' ? html`Articles` : html`<a href="${import.meta.resolve('../../index.html')}">Articles</a>`}</li>
-                    <li><a href="${import.meta.resolve('../../../tools/')}">Tools</a></li>
-                    <li><a href="${import.meta.resolve('../../../games/')}">Games</a></li>
+                    <li>${welcomeLink ? html`<a href="${welcomeLink}">Welcome</a>` : html`Welcome` }</li>
+                    <li>${articlesLink ? html`<a href="${articlesLink}">Articles</a>` : html`Articles` }</li>
+                    <li>${toolsLink ? html`<a href="${toolsLink}">Tools</a>` : html`Tools` }</li>
+                    <li>${gamesLink ? html`<a href="${gamesLink}">Games</a>` : html`Games` }</li>
                 </ul>
             </nav>
             ${published ? html`
