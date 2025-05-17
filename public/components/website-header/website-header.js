@@ -9,10 +9,8 @@ class WebsiteHeader extends HTMLElement {
         const gamesLink = this.getAttribute('gamesLink');
         const template = document.createElement('template');
         template.innerHTML = html`
+            <h1>${title}</h1>
             <nav>
-                <ul>
-                    <li><h1>${title}</h1></li>
-                </ul> 
                 <ul>
                     <li>${welcomeLink ? html`<a href="${welcomeLink}">Welcome</a>` : html`Welcome` }</li>
                     <li>${articlesLink ? html`<a href="${articlesLink}">Articles</a>` : html`Articles` }</li>
