@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>g5t.de</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="My personal private page.">
+    <link rel="icon" href="favicon.ico">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="stylesheet" href="./index.css">
+    <link rel="canonical" href="https://g5t.de/index.html" />
+</head>
+<body class="container">
+    <header>
+        <x-website-header
+            articlesLink="./articles/"
+            toolsLink="./tools/"
+            gamesLink="./games/">
+        </x-website-header>
+    </header>
+
+    <main>
+        <section>
+            <h2>About this site</h2>
+            <p>I'm Daniel, a developer currently diving into the realms of agile coaching, scrum master and therelikes. I mean, I don't know what I'm doing either, so...</p>
+            <p>I wrote a blog engine called <a href="https://github.com/DanielGilbert/Radia">Radia</a>, but then realized that a full-blown engine is honestly not worth the effort for this page. So I dipped my toe into the realms of <a href="https://plainvanillaweb.com">plain vanilla web</a>.</p>
+            <p>I took some inspiration from the layout of <em>plain vanilla web</em>, and adapted some parts.</p>
+        </section>
+    </main>
+    <footer>
+        <x-website-footer></x-website-footer>
+    </footer>
+    <script type="module" src="index.js"></script>
+</body>
+</html>

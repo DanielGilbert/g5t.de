@@ -1,0 +1,11 @@
+/*@import url("./styles/pico-min.css");*/
+@import url("./styles/pico.css");
+
+@media (scripting: none) {
+    x-website-header::before {
+        content: 'Please enable scripting to view the navigation'
+    }
+    x-website-footer::before {
+        content: 'Please enable scripting to view the footer'
+    }
+}
