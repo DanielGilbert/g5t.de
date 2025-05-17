@@ -1,19 +1,7 @@
 @import url("../index.css");
+@import url("./components/article-header/article-header.css");
 
 .byline {
     font-size: 0.8em;
-    margin-bottom: 1.5em;
-}
-
-blog-header {
-    display: block;
-    margin-bottom: 1.5em;
-}
-
-blog-header nav {
-    margin-bottom: 2em;
-}
-
-main img {
-    margin: 0.5em 1em;
+    font-style: italic;
 }

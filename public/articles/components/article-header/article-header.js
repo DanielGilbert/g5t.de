@@ -19,15 +19,15 @@ class ArticleHeader extends HTMLElement {
                         </time>
                     </a></li>
                 </ol>
-                ${updated ? html`
-                    <small>
-                        Last updated:
-                        <time datetime="${updated}">
-                            ${new Date(updated).toDateString({ dateStyle: 'long' })}
-                        </time>
-                    </small>
-                ` : ''}
             </nav>
+            ${updated ? html`
+                <small>
+                    Last updated:
+                    <time datetime="${updated}">
+                        ${new Date(updated).toDateString({ dateStyle: 'long' })}
+                    </time>
+                </small>
+            ` : ''}
         `;
         this.insertBefore(template.content, this.firstChild);
     }
