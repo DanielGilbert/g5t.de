@@ -9,7 +9,6 @@ class WebsiteHeader extends HTMLElement {
         const gamesLink = this.getAttribute('gamesLink');
         const template = document.createElement('template');
         template.innerHTML = html`
-        <header>
             <nav>
                 <ul>
                     <li><h1>${title}</h1></li>
@@ -20,8 +19,7 @@ class WebsiteHeader extends HTMLElement {
                     <li>${toolsLink ? html`<a href="${toolsLink}">Tools</a>` : html`Tools` }</li>
                     <li>${gamesLink ? html`<a href="${gamesLink}">Games</a>` : html`Games` }</li>
                 </ul>
-            </nav>
-        </header>`;
+            </nav>`;
         this.insertBefore(template.content, this.firstChild);
     }
 }
