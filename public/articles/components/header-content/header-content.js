@@ -1,9 +1,9 @@
 import { html } from '../../../lib/html.js';
 
-class ArticleHeader extends HTMLElement {
+class HeaderContent extends HTMLElement {
     connectedCallback() {
         this.role = 'banner';
-        const title = this.getAttribute('title') || 'g5t.de';
+        const title = this.getAttribute('title') || 'g[ilber]t.de';
         const published = this.getAttribute('published');
         const updated = this.getAttribute('updated');
         const template = document.createElement('template');
@@ -33,4 +33,4 @@ class ArticleHeader extends HTMLElement {
     }
 }
 
-export const registerArticleHeader = () => customElements.define('x-article-header', ArticleHeader);
+export const registerHeaderContent = () => customElements.define('x-header-content', HeaderContent);

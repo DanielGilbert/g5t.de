@@ -1,0 +1,11 @@
+x-header-content {
+    display: block;
+}
+
+x-header-content img {
+    margin-top: 1em;
+}
+
+x-header-content small {
+    font-style: italic;
+}
