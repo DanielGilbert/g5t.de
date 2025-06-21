@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Article Index Generator | g5t.de</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="My personal private page.">
+    <link rel="icon" href="./../favicon.ico">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="stylesheet" href="./index.css">
+    <link rel="canonical" href="https://g5t.de/website-tools/articles-index-generator/index.html" />
+</head>
+<body class="container">
+    <header>
+        <h1>g[ilber]t.de</h1>
+    </header>
+    <main>
+        <h2>Articles Index Generator</h2>
+        <section>
+            <p>This tiny generator will take the <em>articles</em> folder, and will create an <em>index.json</em> file, which lists all the articles and tags in this website.</p>
+            <x-articles-index-generator></x-articles-index-generator>
+            <button onclick="document.querySelector('x-articles-index-generator').reset()">Reset</button>
+        </section>    
+    </main>
+
+    <footer>
+        <x-website-footer></x-website-footer>
+    </footer>
+    <script type="module" src="./index.js"></script>
+</body>
+</html>

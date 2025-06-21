@@ -1,0 +1,14 @@
+@import url("../../index.css");
+@import url("../");
+
+x-articles-index-generator {
+    display: block;
+    border: 1px dashed var(--pico-muted-border-color);;
+    padding: 1em;
+    min-height: 5em;
+    max-height: 90vh;
+    overflow: auto;
+    margin-bottom: 1em;
+}
+
+.warning { color: var(--pico-form-element-invalid-border-color); }
