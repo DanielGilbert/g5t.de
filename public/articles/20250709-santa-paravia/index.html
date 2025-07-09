@@ -38,7 +38,7 @@
         <p>Let's unpack the main <em>Run()</em> method of the C# conversion.</p>
 <div class="code-block">
   <line-numbers obtrusive>
-    <syntax-highlight language="cs">public void Run()
+    <syntax-highlight language="clike">public void Run()
 {
     Randomizer = new Random();
     Console.WriteLine("Santa Paravia and Fiumaccio");
@@ -92,7 +92,8 @@
         string? gender = Console.ReadLine()?.ToLower() ?? "f";
         bool isMale = (gender[0] == 'm');
         Players.Add(new Player());
-        InitializePlayer(Players[i], 1400, i, gameLevel, rulersName, isMale);
+        InitializePlayer(Players[i], 1400, i, gameLevel,
+        rulersName, isMale);
     }
 
     PlayGame(Players, NumberOfPlayers);
