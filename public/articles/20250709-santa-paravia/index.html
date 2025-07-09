@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Santa Paravia en Fiumaccio in C# | g5t.de</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+    <meta name="description" content="An article about a very old game in a modern language.">
+    <link rel="icon" href="./../../favicon.ico">
+    <link rel="stylesheet" href="./index.css">
+</head>
+<body class="container">
+    <header>
+        <h1>g[ilber]t.de</h1>
+        <nav>
+            <ul>
+                <li><a href="../../">Welcome</a></li>
+                <li><a href="../../articles/">Articles</a></li>
+                <li><a href="../../tools/">Tools</a></li>
+                <li><a href="../../games/">Games</a></li>
+            </ul>
+        </nav>
+        <figure><img src="./paravia.jpg" /><figcaption>A C# implementation of a very, very old game...</figcaption></figure>
+    </header>
+    <main>
+        <h2>Santa Paravia en Fiumaccio in C#</h2>
+        <x-article-metalines published="2025-07-09" author="Daniel Gilbert"></x-article-metalines>
+        <h4>Entering the rabbit hole.</h4>
+        <p>Recently, I got into a rabbit hole of old city planning games. The very first I found was <a href="https://en.wikipedia.org/wiki/The_Sumerian_Game">The Sumerian Game</a>. Created by Mabel Addis in 1964, it was one of the earliest text-based strategy video games of land and resource management.</p>
+        <p>Other games in the same vain are <a href="https://en.wikipedia.org/wiki/Hamurabi_(video_game)">Hamurabi (1968)</a>, <a href="https://en.wikipedia.org/wiki/Dukedom_(video_game)">Dukedom (1976)</a> and <a href="https://en.wikipedia.org/wiki/Dynasty_(computer_game)">Dynasty (1978)</a>.</p>
+        <p>Nowadays, text-based games see some kind of renaissance, thanks to <a href="https://store.steampowered.com/app/659540/Warsim_The_Realm_of_Aslona/">Warsim</a> or <a href="https://store.steampowered.com/app/3273130/Roots_of_Harmony/">Roots of Harmony</a></p>
+        <p>In this article, I will focus on <a href="https://en.wikipedia.org/wiki/Santa_Paravia_en_Fiumaccio">Santa Paravia en Fiumaccio</a>, a game located in the 15th century in italy. This game was created in 1978 by George Blank, and published in the December 1978 issue of <em>SoftSide</em> magazine for the TRS-80.</p>
+        <p>Wikipedia says this about the game:</p>
+        <blockquote>Based loosely on the text game Hamurabi, <em>Santa Paravia and Fiumaccio</em> was an early <a href="https://en.wikipedia.org/wiki/God_game">god game</a>. It combined '<a href="https://en.wikipedia.org/wiki/Guns_versus_butter_model">guns and butter</a>' economic tradeoffs with graphic development of a kingdom with buildings being constructed and shown on the screen as well as character development, shown as progressive promotions from baron to king.</blockquote>
+        <p>A fellow called "Thomas Knox" <a href="https://web.archive.org/web/20141129011448/http://planet-source-code.com/vb/scripts/ShowCode.asp?txtCodeId=7183&lngWId=3">converted the original TRS-80 code to ANSI-C in 2003</a>. In his conversion, he skipped the map part of the original game. We will get to that when we take a look at the implementation.</p>
+        <h4>Let's dive into the code.</h4>
+        <p><em>Note: If you are interested in the original TRS-80 listing, you will find it here: <a href="https://archive.org/details/softside-magazine-03/">SoftSide Magazine Issue 03 (Santa Parvia)</a></em></p>
+        <p><em>The converted code can be found <a href="https://github.com/DanielGilbert/Paravia">at GitHub</a>.</em></p>
+        <p>Let's unpack the main <em>Run()</em> method of the C# conversion.</p>
+<div class="code-block">
+  <line-numbers obtrusive>
+    <syntax-highlight language="cs">public void Run()
+{
+    Randomizer = new Random();
+    Console.WriteLine("Santa Paravia and Fiumaccio");
+    Console.WriteLine();
+    Console.WriteLine("Do you wish instructions (Y or N)?");
+    string? response = Console.ReadLine();
+
+    if (!String.IsNullOrWhiteSpace(response) && (response.ToLower()[0] == 'y'))
+    {
+        PrintInstructions();
+    }
+
+    Console.WriteLine("How many people want to play (1 to 6)?");
+    response = Console.ReadLine();
+    NumberOfPlayers = Convert.ToInt32(response);
+    if (NumberOfPlayers < 1 || NumberOfPlayers > 6)
+    {
+        Console.WriteLine("Thanks for playing!");
+        return;
+    }
+
+    Console.WriteLine("What will be the difficulty of this game:");
+    Console.WriteLine("1. Apprentice");
+    Console.WriteLine("2. Journeyman");
+    Console.WriteLine("3. Master");
+    Console.WriteLine("4. Grand Master");
+    Console.WriteLine();
+    Console.Write("Choose: ");
+    gameLevel = Convert.ToInt32(Console.ReadLine());
+    if (gameLevel < 1)
+    {
+        gameLevel = 1;
+    }
+    if (gameLevel > 4)
+    {
+        gameLevel = 4;
+    }
+
+    for(int i = 0; i < NumberOfPlayers; i++)
+    {
+        Console.WriteLine("Who is the ruler of {0}?", CityList[i]);
+        string? rulersName = Console.ReadLine();
+
+        if (String.IsNullOrWhiteSpace(rulersName))
+        {
+            i--;
+            continue;
+        }
+
+        Console.WriteLine("Is {0} male or female (m or f)?", rulersName);
+        string? gender = Console.ReadLine()?.ToLower() ?? "f";
+        bool isMale = (gender[0] == 'm');
+        Players.Add(new Player());
+        InitializePlayer(Players[i], 1400, i, gameLevel, rulersName, isMale);
+    }
+
+    PlayGame(Players, NumberOfPlayers);
+}</syntax-highlight>
+  </line-numbers>
+</div>
+        <p>The game relies in parts on randomization. As such, it is no surprise that we need to initialize random functionality. Furthermore, the player will be asked if they want to read the instructions. They are printed from <code>PrintInstructions();</code></p>
+    </main>
+    <footer>
+    <x-website-footer></x-website-footer>
+    </footer>
+    <script type="module" src="./index.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+@import url("../index.css");
+@import url(https://cdn.jsdelivr.net/npm/syntax-highlight-element@1/dist/themes/prettylights.min.css);
+
+.code-block {
+  --prettylights-bg: light-dark(#f6f8fa, #151b23);
+  --prettylights-comment: light-dark(#59636e, #9198a1);
+  
+  color-scheme: light dark;
+  color: var(--prettylights-comment);
+  background-color: var(--prettylights-bg);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  max-width: 100%;
+}
+
+syntax-highlight {
+  display: block;
+  padding-inline-start: 1rem;
+}
+
+line-numbers {
+  /* ensure we use the same font settings */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    line-height: 1.6;
+}
