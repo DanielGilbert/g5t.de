@@ -23,8 +23,8 @@
     </header>
     <main>
         <h2>Santa Paravia en Fiumaccio in C#</h2>
-        <x-article-metalines draft="draft" published="2025-07-09" author="Daniel Gilbert"></x-article-metalines>
-        <h4>Entering the rabbit hole.</h4>
+        <x-article-metalines draft="draft" published="2025-07-09" updated="2025-07-10" author="Daniel Gilbert"></x-article-metalines>
+        <h3>Entering the rabbit hole</h3>
         <p>Recently, I got into a rabbit hole of old city planning games. The very first I found was <a href="https://en.wikipedia.org/wiki/The_Sumerian_Game">The Sumerian Game</a>. Created by Mabel Addis in 1964, it was one of the earliest text-based strategy video games of land and resource management.</p>
         <p>Other games in the same vain are <a href="https://en.wikipedia.org/wiki/Hamurabi_(video_game)">Hamurabi (1968)</a>, <a href="https://en.wikipedia.org/wiki/Dukedom_(video_game)">Dukedom (1976)</a> and <a href="https://en.wikipedia.org/wiki/Dynasty_(computer_game)">Dynasty (1978)</a>.</p>
         <p>Nowadays, text-based games see some kind of renaissance, thanks to <a href="https://store.steampowered.com/app/659540/Warsim_The_Realm_of_Aslona/">Warsim</a> or <a href="https://store.steampowered.com/app/3273130/Roots_of_Harmony/">Roots of Harmony</a></p>
@@ -35,7 +35,7 @@
   </footer></blockquote>
         <p>The goal of the game is to progress from <em>Lady</em> (or <em>Sir</em>) to <em>H.R.H Queen</em> (or <em>H.R.H King</em>), meanwhile defending attackers and distributing grain according to need and availablilty. You can (and should) by additional land, grain and can control taxes.</p>
         <p>A fellow called <em>Thomas Knox</em> <a href="https://web.archive.org/web/20141129011448/http://planet-source-code.com/vb/scripts/ShowCode.asp?txtCodeId=7183&lngWId=3">converted the original TRS-80 code to ANSI-C in 2003</a>. In his conversion, he skipped the map part of the original game. We will get to that when we take a look at the implementation.</p>
-        <h4>Let's dive into the code.</h4>
+        <h3>Let's dive into the code</h3>
         <p><em>Note: If you are interested in the original TRS-80 listing, you will find it here: <a href="https://archive.org/details/softside-magazine-03/">SoftSide Magazine Issue 03 (Santa Parvia)</a></em></p>
         <p><em>The converted code can be found <a href="https://github.com/DanielGilbert/Paravia">at GitHub</a>.</em></p>
         <p>Let's unpack the main <em>Run()</em> method of the C# conversion.</p>
@@ -267,8 +267,25 @@
             <li><code>BuySellGrain()</code>: Display the grain reserve, the grain demand, the price of grain, price of land and the amount of money owned to the player. Also, ask the player what they would like to do next: Buy land or grain, sell land or grain or move to the next step.</li>
             <li><code>ReleaseGrain()</code>: The player is asked how much grain they want to release to the serfs. The player must keep at least a reserve of 20%, and they have to give out at least 20% of the whole reserve.</li>
             <li>The loop from lines <b>8</b>&nbsp;&dash;&nbsp;<b>28</b> deals with the attack logic. The player object contains a flag, <code>InvadeMe</code>, which signals that the player is too weak to defend against an opponent, which will trigger the attack logic. This is where the baron comes in play, if you are a single player. Line <b>25</b> will launch the attack with the baron, if there is only one player.</li>
-            <li><code>AdjustTax</code>: As a player, you can </li>
+            <li><code>AdjustTax()</code>: As a player, you can adjust the customs duty, the sales tax, the wealth tax and the amount of justice. In this method, the game also calculates the revenue the player made and will seize any assets, if the player is bankrupt.</li>
+            <li><code>DrawMap()</code>: In the original TRS-80 code, this draws a neat map that shows you how many buildings you have, and how much land you have in comparison to serfs.</li>
+            <li><code>StatePurchases()</code>: Nowadays, one would refer to it as the <em>buy screen</em>. Here, you can buy a marketplace, a woolen mill, a palace (partially), a cathedral (partially) and convert serfs to soldiers.</li>
+            <li><code>CheckNewTitle()</code>: This is the progression logic. Here, the game calculates the progression based on multiple values with a cap on each. We'll take a closer look later on.</li>
+            <li><code>ImDead()</code>: Yes. It does, what it says. It will print a small memorian message, and also randomly pick a cause of death. If you made it past <em>1450</em>, the only cod will be "<em>of old age after a long reign.</em>", which is kinda neat, to be honest.</li>
         </ul>
+        <h3>The four phases of the game</h3>
+        <p>The original explanation for the game calls out four phases: <em>Harvest Phase</em>, <em>Tax Phase</em>, <em>Map Phase</em> and <em>Public Works Phase</em>. We will dive into each of the phases, referencing the code we just uncovered, and talk a bit about how the game does what (or what I think the game does - I might not have fully understood everything).</p>
+        <h4>Harvest Phase</h4>
+        <p>The functions involved in this phase are the following:</p>
+        <ul>
+            <li><code>GenerateHarvest()</code></li>
+            <li><code>NewLandAndGrainPrices()</code></li>
+            <li><code>BuySellGrain()</code></li>
+            <li><code>ReleaseGrain()</code></li>
+        </ul>
+        <h4>Tax Phase</h4>
+        <h4>Map Phase</h4>
+        <h4>Public Works Phase</h4>
     </main>
     <footer>
     <x-website-footer></x-website-footer>
