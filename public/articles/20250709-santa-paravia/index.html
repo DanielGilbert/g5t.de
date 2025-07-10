@@ -23,15 +23,18 @@
     </header>
     <main>
         <h2>Santa Paravia en Fiumaccio in C#</h2>
-        <x-article-metalines published="2025-07-09" author="Daniel Gilbert"></x-article-metalines>
+        <x-article-metalines draft="true" published="2025-07-09" author="Daniel Gilbert"></x-article-metalines>
         <h4>Entering the rabbit hole.</h4>
         <p>Recently, I got into a rabbit hole of old city planning games. The very first I found was <a href="https://en.wikipedia.org/wiki/The_Sumerian_Game">The Sumerian Game</a>. Created by Mabel Addis in 1964, it was one of the earliest text-based strategy video games of land and resource management.</p>
         <p>Other games in the same vain are <a href="https://en.wikipedia.org/wiki/Hamurabi_(video_game)">Hamurabi (1968)</a>, <a href="https://en.wikipedia.org/wiki/Dukedom_(video_game)">Dukedom (1976)</a> and <a href="https://en.wikipedia.org/wiki/Dynasty_(computer_game)">Dynasty (1978)</a>.</p>
         <p>Nowadays, text-based games see some kind of renaissance, thanks to <a href="https://store.steampowered.com/app/659540/Warsim_The_Realm_of_Aslona/">Warsim</a> or <a href="https://store.steampowered.com/app/3273130/Roots_of_Harmony/">Roots of Harmony</a></p>
         <p>In this article, I will focus on <a href="https://en.wikipedia.org/wiki/Santa_Paravia_en_Fiumaccio">Santa Paravia en Fiumaccio</a>, a game located in the 15th century in italy. This game was created in 1978 by George Blank, and published in the December 1978 issue of <em>SoftSide</em> magazine for the TRS-80.</p>
         <p>Wikipedia says this about the game:</p>
-        <blockquote>Based loosely on the text game Hamurabi, <em>Santa Paravia and Fiumaccio</em> was an early <a href="https://en.wikipedia.org/wiki/God_game">god game</a>. It combined '<a href="https://en.wikipedia.org/wiki/Guns_versus_butter_model">guns and butter</a>' economic tradeoffs with graphic development of a kingdom with buildings being constructed and shown on the screen as well as character development, shown as progressive promotions from baron to king.</blockquote>
-        <p>A fellow called "Thomas Knox" <a href="https://web.archive.org/web/20141129011448/http://planet-source-code.com/vb/scripts/ShowCode.asp?txtCodeId=7183&lngWId=3">converted the original TRS-80 code to ANSI-C in 2003</a>. In his conversion, he skipped the map part of the original game. We will get to that when we take a look at the implementation.</p>
+        <blockquote>Based loosely on the text game Hamurabi, <em>Santa Paravia and Fiumaccio</em> was an early <a href="https://en.wikipedia.org/wiki/God_game">god game</a>. It combined '<a href="https://en.wikipedia.org/wiki/Guns_versus_butter_model">guns and butter</a>' economic tradeoffs with graphic development of a kingdom with buildings being constructed and shown on the screen as well as character development, shown as progressive promotions from baron to king.  <footer>
+    <cite>— Wikipedia</cite>
+  </footer></blockquote>
+        <p>The goal of the game is to progress from <em>Lady</em> (or <em>Sir</em>) to <em>H.R.H Queen</em> (or <em>H.R.H King</em>), meanwhile defending attackers and distributing grain according to need and availablilty. You can (and should) by additional land, grain and can control taxes.</p>
+        <p>A fellow called <em>Thomas Knox</em> <a href="https://web.archive.org/web/20141129011448/http://planet-source-code.com/vb/scripts/ShowCode.asp?txtCodeId=7183&lngWId=3">converted the original TRS-80 code to ANSI-C in 2003</a>. In his conversion, he skipped the map part of the original game. We will get to that when we take a look at the implementation.</p>
         <h4>Let's dive into the code.</h4>
         <p><em>Note: If you are interested in the original TRS-80 listing, you will find it here: <a href="https://archive.org/details/softside-magazine-03/">SoftSide Magazine Issue 03 (Santa Parvia)</a></em></p>
         <p><em>The converted code can be found <a href="https://github.com/DanielGilbert/Paravia">at GitHub</a>.</em></p>
@@ -206,6 +209,66 @@
 }               </syntax-highlight>
             </line-numbers>
         </div>
+        <p>In this method, the computer opponent is introduced, lines <b>8</b> and <b>9</b> initialize a <em>Baron</em> called "Peppone".</p>
+        <p>Lines <b>11</b>&nbsp;&dash;&nbsp;<b>39</b> are running the main loop as long as at least one player is not dead, or none of the players has won the game. That loop triggers the <code>NewTurn()</code> method for each player in the game. The Baron never participates in these turns. It's only <em>job</em> in this game is to be the attacker if only one player is playing the game.</p>
+<div class="code-block">
+        <line-numbers>
+            <syntax-highlight language="clike">private void NewTurn(Player player, int numberOfPlayers, List&lt;Player&gt; players, Player baron)
+{
+    GenerateHarvest(player);
+    NewLandAndGrainPrices(player);
+    BuySellGrain(player);
+    ReleaseGrain(player);
+
+    if (player.InvadeMe is true)
+    {
+        int i = 0;
+        for(i = 0; i < NumberOfPlayers; i++)
+        {
+            if (i != player.WhichPlayer)
+            {
+                if (players[i].Soldiers > (player.Soldiers * 2.4))
+                {
+                    _ = AttackNeighbor(players[i], player);
+                    i = 9;
+                }
+            }
+        }
+
+        if (i != 9)
+        {
+            _ = AttackNeighbor(baron, player);
+        }
+
+    }
+
+    AdjustTax(player);
+    DrawMap(player);
+    StatePurchases(player, numberOfPlayers, players);
+    _ = CheckNewTitle(player);
+
+    player.Year++;
+    if (player.Year == player.YearOfDeath)
+    {
+        ImDead(player);
+    }
+
+    if (player.TitleNum >= 7)
+    {
+        player.IWon = true;
+    }
+}               </syntax-highlight>
+            </line-numbers>
+        </div>
+        <p>Finally, we are able to dive into the nooks and crannies of this game. Each turn, the game will run the following steps:</p>
+        <ul>
+            <li><code>GenerateHarvest()</code>: Calculate the harvest, the amount of rats and the grain reserve. Harvest and rats are randomized numbers.</li>
+            <li><code>NewLandAndGrainPrices()</code>: Calculate the land prices, the grain reserve, the demand for grain and how many grain got eaten by the rats.</li>
+            <li><code>BuySellGrain()</code>: Display the grain reserve, the grain demand, the price of grain, price of land and the amount of money owned to the player. Also, ask the player what they would like to do next: Buy land or grain, sell land or grain or move to the next step.</li>
+            <li><code>ReleaseGrain()</code>: The player is asked how much grain they want to release to the serfs. The player must keep at least a reserve of 20%, and they have to give out at least 20% of the whole reserve.</li>
+            <li>The loop from lines <b>8</b>&nbsp;&dash;&nbsp;<b>28</b> deals with the attack logic. The player object contains a flag, <code>InvadeMe</code>, which signals that the player is too weak to defend against an opponent, which will trigger the attack logic. This is where the baron comes in play, if you are a single player. Line <b>25</b> will launch the attack with the baron, if there is only one player.</li>
+            <li><code>AdjustTax</code>: As a player, you can </li>
+        </ul>
     </main>
     <footer>
     <x-website-footer></x-website-footer>

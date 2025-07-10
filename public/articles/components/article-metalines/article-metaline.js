@@ -5,6 +5,7 @@ class ArticleMetaLines extends HTMLElement {
         const published = this.getAttribute('published');
         const updated = this.getAttribute('updated');
         const author = this.getAttribute('author');
+        const draft = this.getAttribute('draft');
         const timeTemplate = document.createElement('template');
         timeTemplate.innerHTML = html`
             ${published ? html`
@@ -13,7 +14,8 @@ class ArticleMetaLines extends HTMLElement {
                     </time>&nbsp;|&nbsp;
                 ` : ''}
             ${updated ? html`Last updated:&nbsp;<time datetime="${updated}">${new Date(updated).toDateString({ dateStyle: 'long' })}</time>&nbsp;|&nbsp;` : ''}
-            ${author ? html`by ${author}` : ''}`;
+            ${author ? html`by ${author}` : ''}
+            ${draft ? html`<p><em>This article is still a draft!</em></p>`:''}`;
         this.insertBefore(timeTemplate.content, this.firstChild);     
     }
 }
