@@ -36,9 +36,9 @@
         <p><em>Note: If you are interested in the original TRS-80 listing, you will find it here: <a href="https://archive.org/details/softside-magazine-03/">SoftSide Magazine Issue 03 (Santa Parvia)</a></em></p>
         <p><em>The converted code can be found <a href="https://github.com/DanielGilbert/Paravia">at GitHub</a>.</em></p>
         <p>Let's unpack the main <em>Run()</em> method of the C# conversion.</p>
-<div class="code-block">
-  <line-numbers>
-    <syntax-highlight language="clike">public void Run()
+        <div class="code-block">
+        <line-numbers>
+            <syntax-highlight language="clike">public void Run()
 {
     Randomizer = new Random();
     Console.WriteLine("Santa Paravia and Fiumaccio");
@@ -92,15 +92,120 @@
         string? gender = Console.ReadLine()?.ToLower() ?? "f";
         bool isMale = (gender[0] == 'm');
         Players.Add(new Player());
-        InitializePlayer(Players[i], 1400, i, gameLevel,
-        rulersName, isMale);
+        InitializePlayer(Players[i], 1400, i, gameLevel, rulersName, isMale);
     }
 
     PlayGame(Players, NumberOfPlayers);
-}</syntax-highlight>
-  </line-numbers>
-</div>
-        <p>The game relies in parts on randomization. As such, it is no surprise that we need to initialize random functionality. Furthermore, the player will be asked if they want to read the instructions. They are printed from <code>PrintInstructions();</code></p>
+}               </syntax-highlight>
+            </line-numbers>
+        </div>
+        <p>The game relies in parts on randomization. As such, it is no surprise that we need to initialize random functionality. From line <b>3</b>&nbsp;&dash;&nbsp;<b>12</b>, the game will setup the randomizer, greet the player and ask, if the player needs further instructions. If confirmed, the game calls <code>PrintInstructions()</code>.</p>
+        <p>A computer back in the days was a highlight to everyone. They were rather expensive, so there was usually one computer for the entire family. As such, it is no wonder that you are able to play this game at the same terminal with more than 1 player. Lines <b>14</b>&nbsp;&dash;&nbsp;<b>21</b> handle the logic to request the amount of players that are currently in this session.</p>
+        <p>Lines <b>23</b>&nbsp;&dash;&nbsp;<b>38</b> set up the difficulty level for this game. It offers four level of difficulty. The numeric value of difficulty is used in the progression calculation of the game, which we will see more of later on.</p>
+        <p>Depending on the amount of players, lines <b>40</b>&nbsp;&dash;&nbsp;<b>56</b> loop several times and setup the list of players by asking for names and initializing the player. <code>InitializePlayer()</code> is used to set several variables to its' initial state. That are not all variables that belong to the <code>player</code> record, but it's already an impressive list:</p>
+        <div class="code-block">
+        <line-numbers>
+            <syntax-highlight language="clike">public void InitializePlayer(Player player, int year,
+    int city, int level, string name, bool maleOrFemale)
+{
+    player.Cathedral = 0;
+    player.City = CityList[city];
+    player.Clergy = 5;
+    player.CustomsDuty = 25;
+    player.Difficulty = level;
+    player.GrainPrice = 25;
+    player.GrainReserve = 5000;
+    player.IncomeTax = 5;
+    player.IsBankrupt = false;
+    player.IsDead = false;
+    player.InvadeMe = false;
+    player.IWon = false;
+    player.Justice = 2;
+    player.Land = 10000;
+    player.LandPrice = 10.0;
+    player.MaleOrFemale = maleOrFemale;
+    player.Marketplaces = 0;
+    player.Merchants = 25;
+    player.Mills = 0;
+    player.Name = name;
+    player.Nobles = 4;
+    player.OldTitle = 1;
+    player.Palace = 0;
+    player.PublicWorks = 1.0;
+    player.SalesTax = 10;
+    player.Serfs = 2000;
+    player.Soldiers = 25;
+    player.TitleNum = 1;
+    if (player.MaleOrFemale == true)
+        player.Title = MaleTitles[0];
+    else
+        player.Title = FemaleTitles[0];
+    if (city == 6)
+        player.Title = "Baron";
+    player.Treasury = 1000;
+    player.WhichPlayer = city;
+    player.Year = year;
+    player.YearOfDeath = year + 20 + Random(35);
+    return;
+
+}               </syntax-highlight>
+            </line-numbers>
+        </div>
+        <p><code>Random(35);</code> is another function that is used rather often in this game. It will provide a random integer between 0 and the supplied parameters, exclusively. In this case, we will receive an integer between 0 and 34.</p>
+        <p>The game also predetermines your year of death by using the start year (that is always <em>1400</em>), adding <em>20</em> to it (so you will at least play 20 rounds), and then randomly give you the aforementioned 0 to 34 more extra rounds. Of course, you might be defeated by other events, but at some point, you will lose because you died.</p>
+        <p>Back to the original code. The only thing that is left to do is to call <code>PlayGame()</code>:</p>
+<div class="code-block">
+        <line-numbers>
+            <syntax-highlight language="clike">private void PlayGame(List&lt;Player&gt; players, int numberOfPlayers)
+{
+    bool AllDead, Winner;
+    int WinningPlayer = 0;
+    Player Baron;
+    AllDead = false;
+    Winner = false;
+    Baron = new Player();
+    InitializePlayer(Baron, 1400, 6, 4, "Peppone", true);
+
+    while (AllDead is false && Winner is false)
+    {
+        for(int i = 0; i < NumberOfPlayers; i++)
+        {
+            if (!players[i].IsDead)
+            {
+                NewTurn(players[i], NumberOfPlayers, players, Baron);
+            }
+        }
+
+        AllDead = true;
+
+        for(int i = 0; i < NumberOfPlayers; i++)
+        {
+            if (AllDead && players[i].IsDead is false)
+            {
+                AllDead = false;
+            }
+        }
+
+        for(int i = 0; i < NumberOfPlayers; i++)
+        {
+            if (players[i].IWon is true)
+            {
+                Winner = true;
+                WinningPlayer = i;
+            }
+        }
+    }
+
+    if (AllDead is true)
+    {
+        Console.WriteLine("The game has ended.");
+        return;
+    }
+
+    Console.WriteLine("Game Over. {0} {1} wins.", players[WinningPlayer].Title, players[WinningPlayer].Name);
+}               </syntax-highlight>
+            </line-numbers>
+        </div>
     </main>
     <footer>
     <x-website-footer></x-website-footer>
