@@ -23,7 +23,7 @@
     </header>
     <main>
         <h2>Santa Paravia en Fiumaccio in C#</h2>
-        <x-article-metalines draft="draft" published="2025-07-09" updated="2025-07-10" author="Daniel Gilbert"></x-article-metalines>
+        <x-article-metalines draft="draft" published="2025-07-09" updated="2025-07-12" author="Daniel Gilbert"></x-article-metalines>
         <h3>Entering the rabbit hole</h3>
         <p>Recently, I got into a rabbit hole of old city planning games. The very first I found was <a href="https://en.wikipedia.org/wiki/The_Sumerian_Game">The Sumerian Game</a>. Created by Mabel Addis in 1964, it was one of the earliest text-based strategy video games of land and resource management.</p>
         <p>Other games in the same vain are <a href="https://en.wikipedia.org/wiki/Hamurabi_(video_game)">Hamurabi (1968)</a>, <a href="https://en.wikipedia.org/wiki/Dukedom_(video_game)">Dukedom (1976)</a> and <a href="https://en.wikipedia.org/wiki/Dynasty_(computer_game)">Dynasty (1978)</a>.</p>
@@ -38,6 +38,7 @@
         <h3>Let's dive into the code</h3>
         <p><em>Note: If you are interested in the original TRS-80 listing, you will find it here: <a href="https://archive.org/details/softside-magazine-03/">SoftSide Magazine Issue 03 (Santa Parvia)</a></em></p>
         <p><em>The converted code can be found <a href="https://github.com/DanielGilbert/Paravia">at GitHub</a>.</em></p>
+        <p><b>Disclaimer:</b> I'm no mathematician. I'm a programmer. As such, if I try to describe algorithms or equations used in this game, I'll do that using the terminology of a programmer. There is no point in using a language I do not speak.</p>
         <p>Let's unpack the main <em>Run()</em> method of the C# conversion.</p>
         <div class="code-block">
         <line-numbers>
@@ -579,7 +580,32 @@ player.GrainDemand += ((player.Soldiers * 10) + (player.Serfs * 5));</syntax-hig
     return 0;
 }       </syntax-highlight>
             </line-numbers>
-        </div> 
+        </div>
+        <p>Lines <b>13</b>&nbsp;&dash;&nbsp;<b>38</b> deal with the fundamental question of how much grain you will distribute for consumption. The game limits you in what you are able to do: You should release at least 20% of your available grain, but you must not release more than 80%. Once these constraints are satisfied, you are allowed to continue.</p>
+        <p>Lines <b>40</b>&nbsp;&dash;&nbsp;<b>46</b> rest all necessary variables for this routine on our player class to the initial start values. Line <b>47</b> substracts your choosen amount of grain from your reserve.</p>
+        <p>Our well-known <em>z</em> variable is back again. This time, it represents the ratio between your choosen grain amount and the demand. It then shifts this value by one. This means, that if you satisfied the demand for grain, y will be <em>0</em>. If you undercut the demand, the value will be negative. If you "overspend", the value will be positive.</p>
+        <p>Interesting enough: If you overspend, the algorithm will cut <em>y</em> in half (in line <b>53</b>). If <em>z</em> is then still bigger than 0.25, the game will take this value, divide it by 10 and add 0.25 to it. I'm not quite sure why, but maybe we will figure it out down the line.</p>
+        <p>In line <b>61</b>, <em>zp</em> is introduced: It will be added to <em>z</em> in line <b>75</b>, after being divided by 10. <em>zp</em> starts with an initial value of 50, which is reduced by the customs duty, the sales tax and the player income tax. The taxes have limits:</p>
+        <ul>
+            <li>Customs Duty: 0 to 100</li>
+            <li>Sales Tax: 0 to 50</li>
+            <li>Income Tax: 0 to 25</li>
+        </ul>
+        <p>This means, that <em>zp</em> can get as low as <em>-125</em>. If <em>zp</em> goes down to a negative value, it will be multiplied by justice. As a reminder, that's what justice stands for:</p>
+        <ul>
+            <li><b>1</b>: Very fair</li>
+            <li><b>2</b>: Moderate</li>
+            <li><b>3</b>: Harsh</li>
+            <li><b>4</b>: Outrageous</li>
+        </ul>
+        <p>Depending on your justice, zp can go down to as much as <em>-500</em>. However, in line <b>68</b>, the value is again divided by 10, effectively capping it at <em>-50</em> to <em>5</em>. If <em>zp</em> is still bigger than 0, then in line <b>72</b>, justice is subtracted from <em>3</em> and added to the value of <em>zp</em>. Finally, in line <b>75</b>, <em>zp</em> will again be divided by 10 and added to our previous value of <em>z</em>.</p>
+        <p>Interesting enough, now <em>z</em> also gets a cap in line <b>77</b>, which will limit it to <em>0.5</em>.</p>
+        <p>Between the lines <b>80</b> and <b>129</b>, the code branches off depending on whether you decided to spend less or more than the demand of grain.</p>
+        <p>If you happen to spend less than the demand, lines <b>82</b>&nbsp;&dash;&nbsp;<b>96</b> will calculate the effects of this:</p>
+        <p><code>(Convert.ToDouble(player.GrainDemand) - Convert.ToDouble(howMuch)) / player.GrainDemand * 100.0 - 9.0</code></p>
+        <p>This code will give you a value of <em>x</em>, which is essentially the percentage of how much your released grain deviates from the demanded grain. If the demand is higher then what you provided, x will be positive. If the demand is lower than what you provided, x will be negative. However, x will be capped to 65. So if the demand is 20000, but you can only supply 2000, x won't go up to <em>81</em>, it will be capped at 65. Interestingly, if you overspend, this has no effect in this part of the code, as it will simply set <em>x</em> and <em>xp</em> to zero. That is kind of interesting, because this branch only should get entered if the provided amount of grain is already lower than the demand. So <em>x</em> should never get too low.</p>
+        <p>The next two calls are <code>SerfsProcreating(player, 3.0)</code> and <code>SerfsDecomposing(player, xp + 8.0)</code>.</p>
+        <p>These two function essentially use the same algorithmic logic, of course changing different values in the player class (<em>NewSerfs</em> for <em>SerfsProcreating</em>, and <em>DeadSerfs</em> for <em>SerfsDecomposing</em>). Btw, I did not come up with the name for theses methods.</p>
         <h6>Grain Reserve</h6>
         <p></p>
         <h4>Tax Phase</h4>
