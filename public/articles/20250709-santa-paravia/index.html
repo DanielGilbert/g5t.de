@@ -23,17 +23,17 @@
     </header>
     <main>
         <h2>Santa Paravia en Fiumaccio in C#</h2>
-        <x-article-metalines draft="draft" published="2025-07-09" updated="2025-07-14" author="Daniel Gilbert"></x-article-metalines>
+        <x-article-metalines published="2025-07-09" updated="2025-07-14" author="Daniel Gilbert"></x-article-metalines>
         <h3>Entering the rabbit hole</h3>
         <p>Recently, I got into a rabbit hole of old city planning games. The very first I found was <a href="https://en.wikipedia.org/wiki/The_Sumerian_Game">The Sumerian Game</a>. Created by Mabel Addis in 1964, it was one of the earliest text-based strategy video games of land and resource management.</p>
         <p>Other games in the same vain are <a href="https://en.wikipedia.org/wiki/Hamurabi_(video_game)">Hamurabi (1968)</a>, <a href="https://en.wikipedia.org/wiki/Dukedom_(video_game)">Dukedom (1976)</a> and <a href="https://en.wikipedia.org/wiki/Dynasty_(computer_game)">Dynasty (1978)</a>.</p>
         <p>Nowadays, text-based games see some kind of renaissance, thanks to <a href="https://store.steampowered.com/app/659540/Warsim_The_Realm_of_Aslona/">Warsim</a> or <a href="https://store.steampowered.com/app/3273130/Roots_of_Harmony/">Roots of Harmony</a></p>
-        <p>In this article, I will focus on <a href="https://en.wikipedia.org/wiki/Santa_Paravia_en_Fiumaccio">Santa Paravia en Fiumaccio</a>, a game located in the 15th century in italy. This game was created in 1978 by George Blank, and published in the December 1978 issue of <em>SoftSide</em> magazine for the TRS-80.</p>
+        <p>In this article, I will focus on <a href="https://en.wikipedia.org/wiki/Santa_Paravia_en_Fiumaccio">Santa Paravia en Fiumaccio</a>, a game set in the 15th century in italy. This game was created in 1978 by George Blank, and published in the December 1978 issue of <em>SoftSide</em> magazine for the TRS-80.</p>
         <p>Wikipedia says this about the game:</p>
         <blockquote>Based loosely on the text game Hamurabi, <em>Santa Paravia and Fiumaccio</em> was an early <a href="https://en.wikipedia.org/wiki/God_game">god game</a>. It combined '<a href="https://en.wikipedia.org/wiki/Guns_versus_butter_model">guns and butter</a>' economic tradeoffs with graphic development of a kingdom with buildings being constructed and shown on the screen as well as character development, shown as progressive promotions from baron to king.  <footer>
     <cite>— Wikipedia</cite>
   </footer></blockquote>
-        <p>The goal of the game is to progress from <em>Lady</em> (or <em>Sir</em>) to <em>H.R.H Queen</em> (or <em>H.R.H King</em>), meanwhile defending attackers and distributing grain according to need and availablilty. You can (and should) by additional land, grain and can control taxes.</p>
+        <p>The goal of the game is to progress from <em>Lady</em> (or <em>Sir</em>) to <em>H.R.H Queen</em> (or <em>H.R.H King</em>), meanwhile defending attackers and distributing grain according to need and availablilty. You can (and should) buy additional land, grow grain and control taxes.</p>
         <p>A fellow called <em>Thomas Knox</em> <a href="https://web.archive.org/web/20141129011448/http://planet-source-code.com/vb/scripts/ShowCode.asp?txtCodeId=7183&lngWId=3">converted the original TRS-80 code to ANSI-C in 2003</a>. In his conversion, he skipped the map part of the original game. We will get to that when we take a look at the implementation.</p>
         <h3>Let's dive into the code</h3>
         <p><em>Note: If you are interested in the original TRS-80 listing, you will find it here: <a href="https://archive.org/details/softside-magazine-03/">SoftSide Magazine Issue 03 (Santa Parvia)</a></em></p>
@@ -103,7 +103,7 @@
 }               </syntax-highlight>
             </line-numbers>
         </div>
-        <p>The game relies in parts on randomization. As such, it is no surprise that we need to initialize random functionality. From line <b>3</b>&nbsp;&dash;&nbsp;<b>12</b>, the game will setup the randomizer, greet the player and ask, if the player needs further instructions. If confirmed, the game calls <code>PrintInstructions()</code>.</p>
+        <p>The game relies in large parts on randomization. As such, it is no surprise that we need to initialize random functionality. From line <b>3</b>&nbsp;&dash;&nbsp;<b>12</b>, the game will setup the randomizer, greet the player and ask, if the player needs further instructions. If confirmed, the game calls <code>PrintInstructions()</code>.</p>
         <p>A computer back in the days was a highlight to everyone. They were rather expensive, so there was usually one computer for the entire family. As such, it is no wonder that you are able to play this game at the same terminal with more than 1 player. Lines <b>14</b>&nbsp;&dash;&nbsp;<b>21</b> handle the logic to request the amount of players that are currently in this session.</p>
         <p>Lines <b>23</b>&nbsp;&dash;&nbsp;<b>38</b> set up the difficulty level for this game. It offers four level of difficulty. The numeric value of difficulty is used in the progression calculation of the game, which we will see more of later on.</p>
         <p>Depending on the amount of players, lines <b>40</b>&nbsp;&dash;&nbsp;<b>56</b> loop several times and setup the list of players by asking for names and initializing the player. <code>InitializePlayer()</code> is used to set several variables to its' initial state. That are not all variables that belong to the <code>player</code> record, but it's already an impressive list:</p>
@@ -582,7 +582,7 @@ player.GrainDemand += ((player.Soldiers * 10) + (player.Serfs * 5));</syntax-hig
             </line-numbers>
         </div>
         <p>Lines <b>13</b>&nbsp;&dash;&nbsp;<b>38</b> deal with the fundamental question of how much grain you will distribute for consumption. The game limits you in what you are able to do: You should release at least 20% of your available grain, but you must not release more than 80%. Once these constraints are satisfied, you are allowed to continue.</p>
-        <p>Lines <b>40</b>&nbsp;&dash;&nbsp;<b>46</b> rest all necessary variables for this routine on our player class to the initial start values. Line <b>47</b> substracts your choosen amount of grain from your reserve.</p>
+        <p>Lines <b>40</b>&nbsp;&dash;&nbsp;<b>46</b> reset all necessary variables for this routine on our player class to the initial start values. Line <b>47</b> substracts your choosen amount of grain from your reserve.</p>
         <p>Our well-known <em>z</em> variable is back again. This time, it represents the ratio between your choosen grain amount and the demand. It then shifts this value by one. This means, that if you satisfied the demand for grain, y will be <em>0</em>. If you undercut the demand, the value will be negative. If you "overspend", the value will be positive.</p>
         <p>Interesting enough: If you overspend, the algorithm will cut <em>y</em> in half (in line <b>53</b>). If <em>z</em> is then still bigger than 0.25, the game will take this value, divide it by 10 and add 0.25 to it. I'm not quite sure why, but maybe we will figure it out down the line.</p>
         <p>In line <b>61</b>, <em>zp</em> is introduced: It will be added to <em>z</em> in line <b>75</b>, after being divided by 10. <em>zp</em> starts with an initial value of 50, which is reduced by the customs duty, the sales tax and the player income tax. The taxes have limits:</p>
@@ -603,7 +603,7 @@ player.GrainDemand += ((player.Soldiers * 10) + (player.Serfs * 5));</syntax-hig
         <p>Between the lines <b>80</b> and <b>129</b>, the code branches off depending on whether you decided to spend less or more than the demand of grain.</p>
         <p>If you happen to spend less than the demand, lines <b>82</b>&nbsp;&dash;&nbsp;<b>96</b> will calculate the effects of this:</p>
         <p><code>(Convert.ToDouble(player.GrainDemand) - Convert.ToDouble(howMuch)) / player.GrainDemand * 100.0 - 9.0</code></p>
-        <p>This code will give you a value of <em>x</em>, which is essentially the percentage of how much your released grain deviates from the demanded grain. If the demand is higher then what you provided, x will be positive. If the demand is lower than what you provided, x will be negative. However, x will be capped to 65. So if the demand is 20000, but you can only supply 2000, x won't go up to <em>81</em>, it will be capped at 65. Interestingly, if you overspend, this has no effect in this part of the code, as it will simply set <em>x</em> and <em>xp</em> to zero. That is kind of interesting, because this branch only should get entered if the provided amount of grain is already lower than the demand. So <em>x</em> should never get too low.</p>
+        <p>This code will give you a value of <em>x</em>, which is essentially the percentage of how much your released grain deviates from the demanded grain. If the demand is higher then what you provided, x will be positive. If the demand is lower than what you provided, x will be negative. However, x will be capped to 65. So if the demand is 20000, but you can only supply 2000, x won't go up to <em>81</em>, it will be capped at 65. If you overspend, this has no effect in this part of the code, as it will simply set <em>x</em> and <em>xp</em> to zero. That is kind of interesting, because this branch only should get entered if the provided amount of grain is already lower than the demand. So <em>x</em> should never get too low.</p>
         <p>The next two calls are <code>SerfsProcreating(player, 3.0)</code> and <code>SerfsDecomposing(player, xp + 8.0)</code>.</p>
         <p>These two function essentially use the same algorithmic logic, of course changing different values in the player class (<em>NewSerfs</em> for <em>SerfsProcreating</em>, and <em>DeadSerfs</em> for <em>SerfsDecomposing</em>). Btw, I did not come up with the name for theses methods.</p>
 
@@ -650,7 +650,7 @@ player.GrainDemand += ((player.Soldiers * 10) + (player.Serfs * 5));</syntax-hig
         <p>If your <em>Justice</em> is higher than <em>2</em>, which equals <em>harsh</em> or <em>outrageous</em>, than there is a punishment called <em>JustiveRevenue</em>. It is calculated by dviding the amount of serfs by 100, multiplied by 16 (only happens if your justice is "outrageous"). The result of this calculation will be the upper limit of a random value, which will be the final JusticeRevenue. This will equal the amount of serfs that are fleeing, and will be subtracted from the amount of serfs.</p>
         <p>Next up, the code calculates some revenue streams. Each marketplace generates a revenue of <em>75</em>, the military has some randomness to it: 55 is the lower limit, 304 is the upper limit of revenue. Soldiers will cost 3 golden florins per soldier.</p>
         <p>Finally, the game will check if you will be invaded. However, I think I've spotted an error in the C translation of the original listing.</p>
-        <h6>A small mistake</h6>
+        <h6>A small mistake?</h6>
         <p>The implementation in C does this:</p>
 <div class="code-block">
         <line-numbers>
@@ -799,7 +799,7 @@ if ((Me->Land / 500) > Me->Soldiers)
     </line-numbers>
 </div>
         <h6>GenerateIncome</h6>
-        <p>This function is the first of many subroutines, and will on the one hand print out the amount of justice in a hum readable fashion, and on the other hand calculate all tax and justice related revenue streams.</p>
+        <p>This function is the first of many subroutines, and will on the one hand print out the amount of justice in a human readable fashion, and on the other hand calculate all tax and justice related revenue streams.</p>
         <p><em>JusticeRevenue</em> is calculated by multiplying <em>Justice</em> with <em>300</em> and subtracting <em>500</em> from that value. The result of that operation is then multiplied with the title of the player, generating more income the higher the rank of the player becomes. That also means that a higher justice value will generate more income at the price of a random amount of people fleeing your city at some point.</p>
         <p><em>CustomsDutyRevenue</em>, <em>SalesTaxRevenue</em> and <em>IncomeTaxRevenue</em> all contain a common factor in the calculations, <em>y</em>. This factor is calculated by subtracting the sales tax, customs duty and income tax from 150, and then dividing that value by 100. If <em>y</em> turns below <em>1.0</em>, the value is locked to <em>1.0</em>. It's then divided by <em>100</em></p>
         <p>In essence, this means for the customs duty revenue, that high taxes will negate the effect merchants have on the revenue stream. For sales tax, that eliminates the effect justice has, and for income tax, it eliminates the effect justice and nobles have on the revenue. That is, because <em>y</em> is a float value, but get's casted to integer, thus eliminating the fraction and be either 1 or 0.</p>
@@ -990,7 +990,8 @@ if (player.TitleNum >= 7)
     </line-numbers>
 </div>
     <h3>Final thoughts</h3>
-    <p>That was more to unpack than I anticipated in the beginning. But it was kind of fun, anyways. The game is surprisingly complex, if you consider it being almost 50 years old (in 2025, at the time of writing).</p>
+    <p>That was more to unpack than I anticipated in the beginning. But it was kind of fun, anyways. The game is surprisingly complex, if you consider it being almost 50 years old (in 2025, at the time of writing). So, what should we do from here on? Well, on the one hand, there is a lot of things to add. You could modify the code to finally print a map. You could go ahead and tweak the variables, remove some kind of randomness and add some more layers of simulation. You could also go ahead and implement a version that uses graphics. The options are endless. I, for my part, am thinking about building a game like this set in the age and time of Cyberpunk.</p>
+    <p>Make sure to check out my conversion of the game over on <a href="">Github</a>, and find the downloadable versions in the <a href="">Release Section</a>.</p>
     </main>
     <footer>
     <x-website-footer></x-website-footer>
