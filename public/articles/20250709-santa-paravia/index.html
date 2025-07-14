@@ -23,7 +23,7 @@
     </header>
     <main>
         <h2>Santa Paravia en Fiumaccio in C#</h2>
-        <x-article-metalines draft="draft" published="2025-07-09" updated="2025-07-12" author="Daniel Gilbert"></x-article-metalines>
+        <x-article-metalines draft="draft" published="2025-07-09" updated="2025-07-14" author="Daniel Gilbert"></x-article-metalines>
         <h3>Entering the rabbit hole</h3>
         <p>Recently, I got into a rabbit hole of old city planning games. The very first I found was <a href="https://en.wikipedia.org/wiki/The_Sumerian_Game">The Sumerian Game</a>. Created by Mabel Addis in 1964, it was one of the earliest text-based strategy video games of land and resource management.</p>
         <p>Other games in the same vain are <a href="https://en.wikipedia.org/wiki/Hamurabi_(video_game)">Hamurabi (1968)</a>, <a href="https://en.wikipedia.org/wiki/Dukedom_(video_game)">Dukedom (1976)</a> and <a href="https://en.wikipedia.org/wiki/Dynasty_(computer_game)">Dynasty (1978)</a>.</p>
@@ -606,11 +606,391 @@ player.GrainDemand += ((player.Soldiers * 10) + (player.Serfs * 5));</syntax-hig
         <p>This code will give you a value of <em>x</em>, which is essentially the percentage of how much your released grain deviates from the demanded grain. If the demand is higher then what you provided, x will be positive. If the demand is lower than what you provided, x will be negative. However, x will be capped to 65. So if the demand is 20000, but you can only supply 2000, x won't go up to <em>81</em>, it will be capped at 65. Interestingly, if you overspend, this has no effect in this part of the code, as it will simply set <em>x</em> and <em>xp</em> to zero. That is kind of interesting, because this branch only should get entered if the provided amount of grain is already lower than the demand. So <em>x</em> should never get too low.</p>
         <p>The next two calls are <code>SerfsProcreating(player, 3.0)</code> and <code>SerfsDecomposing(player, xp + 8.0)</code>.</p>
         <p>These two function essentially use the same algorithmic logic, of course changing different values in the player class (<em>NewSerfs</em> for <em>SerfsProcreating</em>, and <em>DeadSerfs</em> for <em>SerfsDecomposing</em>). Btw, I did not come up with the name for theses methods.</p>
-        <h6>Grain Reserve</h6>
-        <p></p>
+
+<div class="code-block">
+        <line-numbers>
+            <syntax-highlight language="clike">private void SerfsProcreating(Player player, double myScale)
+{
+    int absc = 0;
+    double ord = 0.0;
+
+    absc = Convert.ToInt32(myScale);
+    ord = myScale - Convert.ToDouble(absc);
+
+    player.NewSerfs = Convert.ToInt32((Random(absc) + ord) * Convert.ToDouble(player.Serfs) / 100.0);
+    player.Serfs += player.NewSerfs;
+
+    Console.WriteLine("{0} serfs born this year.", player.Serfs);
+}       </syntax-highlight>
+            </line-numbers>
+        </div>
+        <p>If you spend more grain than demand was set, the game will start with the calculation of how many serfs were born and how many died. If your customs duty and sales tax combined is less than 35, the game will randomly increase the amount of merchants by <em>0</em> to <em>3</em>. You will also receive nobles and clergies randomly, if your income tax is below a random limit between <em>0</em> and <em>27</em>.</p>
+        <p>If your surplus of grain released is more than 30%, serfs will start to move into your city. The code will also randomly apply a (reasonably) large amount of merchants, increase the nobles by one and add two clergies into your city. So releasing 130% of the grain in demand kind of pays off:</p>
+<div class="code-block">
+        <line-numbers>
+            <syntax-highlight language="clike">if (howMuch > Convert.ToInt32(Convert.ToDouble(player.GrainDemand) * 1.3))
+{
+    zp = Convert.ToDouble(player.Serfs) / 1000.0;
+    z = Convert.ToDouble(howMuch - player.GrainDemand) / Convert.ToDouble(player.GrainDemand) * 10.0;
+    z *= (zp * Convert.ToDouble(Random(25)));
+    z += Convert.ToDouble(Random(40));
+    player.TransplantedSerfs = Convert.ToInt32(z);
+    player.Serfs += player.TransplantedSerfs;
+    Console.WriteLine("{0} serfs move to the city.", player.TransplantedSerfs);
+    zp = Convert.ToDouble(z);
+    z = (Convert.ToDouble(zp) * Convert.ToDouble(Randomizer.Next(0, Int16.MaxValue)) / Convert.ToDouble(Int16.MaxValue)); //((float)zp * (float)rand()) / (float)RAND_MAX;
+    if (z > 50.0)
+        z = 50.0;
+    player.Merchants += Convert.ToInt32(z);
+    player.Nobles++;
+    player.Clergy += 2;
+}   </syntax-highlight>
+            </line-numbers>
+        </div>
+        <p>If your <em>Justice</em> is higher than <em>2</em>, which equals <em>harsh</em> or <em>outrageous</em>, than there is a punishment called <em>JustiveRevenue</em>. It is calculated by dviding the amount of serfs by 100, multiplied by 16 (only happens if your justice is "outrageous"). The result of this calculation will be the upper limit of a random value, which will be the final JusticeRevenue. This will equal the amount of serfs that are fleeing, and will be subtracted from the amount of serfs.</p>
+        <p>Next up, the code calculates some revenue streams. Each marketplace generates a revenue of <em>75</em>, the military has some randomness to it: 55 is the lower limit, 304 is the upper limit of revenue. Soldiers will cost 3 golden florins per soldier.</p>
+        <p>Finally, the game will check if you will be invaded. However, I think I've spotted an error in the C translation of the original listing.</p>
+        <h6>A small mistake</h6>
+        <p>The implementation in C does this:</p>
+<div class="code-block">
+        <line-numbers>
+            <syntax-highlight language="clike">if ((Me->Land / 1000) > Me->Soldiers)
+{
+    Me->InvadeMe = True;
+    return (3);
+}
+if ((Me->Land / 500) > Me->Soldiers)
+
+{
+    Me->InvadeMe = True;
+    return (3);
+}   </syntax-highlight>
+            </line-numbers>
+        </div>
+        <p>That seems... redundant? So, let's have a look at the original listing:</p>
+<div class="code-block">
+        <line-numbers>
+            <syntax-highlight language="clike">4939 ´ INVASION
+4940 IF (L(E)/1000)&gt;P(E) THEN 8100
+4945 IF (L(E)/500)&lt;P(E) THEN 4980
+4950 FOR A=1TOF:IF A=E THEN 4970
+4960   IF P(A)&gt;(P(E)*2. 4) THEN 8100 
+4970 NEXT
+4980 INPUT"(PRESS ENTER)";A$
+4990 RETURN</syntax-highlight>
+            </line-numbers>
+        </div>
+        <p>Mhm. <em>8100</em> jumps to the invasion. So - if your ratio of soldiers to land falls under 1 to 1000, than you will be invaded. If your ratio falls down to 1 to 500, you <em>MIGHT</em> get invaded, if another player has at least 2.5 times the amount of soldiers you have. That kind of makes sense.</p>
+        <p>And indeed, the c version accounts for that:</p>
+<div class="code-block">
+        <line-numbers>
+            <syntax-highlight language="clike">if (Me->InvadeMe == True)
+{
+    for (i = 0; i < HowMany; i++)
+        if (i != Me->WhichPlayer)
+            if (MyPlayers[i].Soldiers > (Me->Soldiers * 2.4))
+            {
+                AttackNeighbor(&MyPlayers;[i], Me);
+                i = 9;
+            }
+    if (i != 9)
+        AttackNeighbor(Baron, Me);
+}       </syntax-highlight>
+            </line-numbers>
+        </div>
+        <p>Our version does the same. However, to circle back to the original question: Yes, that check is redundant, because the differentiation is not done at that place. Which is fine, but that means we can just check for one condition being fulfilled.</p>
+        <p>And with that, we can wrap up this whole function, as we already dipped our toe into the logic around <code>AttackNeighbor</code></p>
+        <h5>AttackNeighbor</h5>
+        <p>This function is not too difficult to disassemble. It first checks if the attacker provided is our "Baron". As he does not participate in the game logic, he will randomly take between <em>1000</em> and <em>9999</em> from you.</p>
+        <p>Otherwise, the attacker will receive <code>(attacker.soldiers * 1000) - (attacker.Land / 3)</code> amount of land from the player. Now, if the amount of land taken is bigger than this: <code>opponent.Land - 5000</code>, than land taken will be changed to <em>(opponent.Land - 5000) / 2</em></p>
+        <p>An invasion will also claim the life of your soldiers. How many, you ask? Well, random is your fate. A random number between 0 and 40 will be the amount of dead soldiers. However, your opponent needs to have at least 15 more soldiers than the random amount selected. If that's not the case, the amount of dead soldiers will be <code>Attacker.Soldiers - 15</code></p>
+        <p>And with that, the <em>Harvest Phase</em> is concluded. Phew!</p>
         <h4>Tax Phase</h4>
-        <h4>Map Phase</h4>
-        <h4>Public Works Phase</h4>
+        <p>Ah, yes. Taxes. Finally. Time to generate some revenue. This phase consists of the following methods:</p>
+        <ul>
+            <li>AdjustTax</li>
+        </ul>
+        <p>That's correct: It only has one function.</p>
+        <h5>AdjustTax</h5>
+        <p>This function consists of several subcalls to other functions, but in its' heart, it allows you enter new values for your taxes and your justice, and gives you an overview about the current taxes:</p>
+<div class="code-block">
+        <line-numbers>
+            <syntax-highlight language="clike">private void AdjustTax(Player player)
+{
+    string result = string.Empty;
+    int val = 1;
+    int duty = 0;
+
+    while (val != 0 || result[0] != 'q')
+    {
+        Console.WriteLine("{0} {1}", player.Title, player.Name);
+        GenerateIncome(player);
+
+        Console.WriteLine("({0}%)\t\t({1}%)\t\t({2}%)", player.CustomsDuty, player.SalesTax, player.IncomeTax);
+        Console.WriteLine("1.Customs Duty, 2.Sales Tax, 3.Wealth Tax, ");
+        Console.WriteLine("4. Justice");
+        Console.Write("Enter tax number for changes, q to continue: ");
+
+        result = Console.ReadLine() ?? "q";
+        if (result.ToLower() == "q")
+        {
+            val = 0;
+            continue;
+        }
+
+        val = Convert.ToInt32(result);
+
+        Console.WriteLine();
+
+        switch (val)
+        {
+            case 1:
+                Console.Write("New customs duty (0 to 100): ");
+                result = Console.ReadLine() ?? "0";
+                duty = Convert.ToInt32(result);
+                if (duty > 100)
+                    duty = 100;
+                if (duty < 0)
+                    duty = 0;
+                player.CustomsDuty = duty;
+                break;
+
+            case 2:
+                Console.Write("New sales tax (0 to 50): ");
+                result = Console.ReadLine() ?? "0";
+                duty = Convert.ToInt32(result);
+                if (duty > 50)
+                    duty = 50;
+                if (duty < 0)
+                    duty = 0;
+                player.SalesTax = duty;
+                break;
+
+            case 3:
+                Console.Write("New income tax (0 to 25): ");
+                result = Console.ReadLine() ?? "0";
+                duty = Convert.ToInt32(result);
+                if (duty > 25)
+                    duty = 25;
+                if (duty < 0)
+                    duty = 0;
+                player.IncomeTax = duty;
+                break;
+
+            case 4:
+                Console.WriteLine("Justice:  1. Very fair, 2. Moderate");
+                Console.Write(" 3. Harsh, 4. Outrageous: ");
+                result = Console.ReadLine() ?? "1";
+                duty = Convert.ToInt32(result);
+                if (duty > 4)
+                    duty = 4;
+                if (duty < 1)
+                    duty = 1;
+                player.Justice = duty;
+                break;
+        }
+
+    }
+    AddRevenue(player);
+
+    if (player.IsBankrupt)
+        SeizeAssets(player);
+}       </syntax-highlight>
+    </line-numbers>
+</div>
+        <h6>GenerateIncome</h6>
+        <p>This function is the first of many subroutines, and will on the one hand print out the amount of justice in a hum readable fashion, and on the other hand calculate all tax and justice related revenue streams.</p>
+        <p><em>JusticeRevenue</em> is calculated by multiplying <em>Justice</em> with <em>300</em> and subtracting <em>500</em> from that value. The result of that operation is then multiplied with the title of the player, generating more income the higher the rank of the player becomes. That also means that a higher justice value will generate more income at the price of a random amount of people fleeing your city at some point.</p>
+        <p><em>CustomsDutyRevenue</em>, <em>SalesTaxRevenue</em> and <em>IncomeTaxRevenue</em> all contain a common factor in the calculations, <em>y</em>. This factor is calculated by subtracting the sales tax, customs duty and income tax from 150, and then dividing that value by 100. If <em>y</em> turns below <em>1.0</em>, the value is locked to <em>1.0</em>. It's then divided by <em>100</em></p>
+        <p>In essence, this means for the customs duty revenue, that high taxes will negate the effect merchants have on the revenue stream. For sales tax, that eliminates the effect justice has, and for income tax, it eliminates the effect justice and nobles have on the revenue. That is, because <em>y</em> is a float value, but get's casted to integer, thus eliminating the fraction and be either 1 or 0.</p>
+<div class="code-block">
+        <line-numbers>
+            <syntax-highlight language="clike">player.CustomsDutyRevenue = player.Nobles * 180 + player.Clergy * 75 + player.Merchants * 20 * Convert.ToInt32(y);
+player.CustomsDutyRevenue += Convert.ToInt32(player.PublicWorks * 100.0);
+player.CustomsDutyRevenue = Convert.ToInt32((Convert.ToDouble(player.CustomsDuty) / 100.0 * Convert.ToDouble(player.CustomsDutyRevenue)));
+
+player.SalesTaxRevenue = player.Nobles * 50 + player.Merchants * 25 + Convert.ToInt32(player.PublicWorks * 10.0);
+player.SalesTaxRevenue *= Convert.ToInt32(y * (5 - player.Justice) * player.SalesTax);
+player.SalesTaxRevenue /= 200;
+
+player.IncomeTaxRevenue = player.Nobles * 250 + Convert.ToInt32(player.PublicWorks * 20.0);
+player.IncomeTaxRevenue += (10 * player.Justice * player.Nobles * Convert.ToInt32(y));
+player.IncomeTaxRevenue *= player.IncomeTax;
+player.IncomeTaxRevenue /= 100;
+</syntax-highlight>
+    </line-numbers>
+</div>
+    <h6>AddRevenue</h6>
+    <p>This functions adds the revenue streams that we calculated in the previous method to your treasury. Now, it is possible to spend more money than you own, and even your taxes revenue might not add enough money to the treasury to turn your account positive. If your treasury is negative, the game will penalize you by subtracting another 50% of your deficit from your treasury. Your rank dictates, how much deficit is allowed, by multiplying your rank with <em>-10000</em>. If your treasury is below that value, the game will set the <em>IsBankrupt</em> flag on you.</p>
+    <h6>SeizeAssets</h6>
+    <p>If you are bankrupt, the game will seize your assets. That's pretty straight forward, as the game will basically reset all your possessions.</p>
+<div class="code-block">
+        <line-numbers>
+            <syntax-highlight language="clike">private void SeizeAssets(Player player)
+{
+    string result = string.Empty;
+    player.Marketplaces = 0;
+    player.Palace = 0;
+    player.Cathedral = 0;
+    player.Mills = 0;
+    player.Land = 6000;
+    player.PublicWorks = 1.0;
+    player.Treasury = 100;
+    player.IsBankrupt = false;
+    Console.WriteLine();
+    Console.WriteLine("{0} {1} is bankrupt.", player.Title, player.Name);
+    Console.WriteLine();
+    Console.WriteLine("Creditors have seized much of your assets.");
+    Console.WriteLine("(Press ENTER): ");
+    Console.ReadLine();
+    return;
+}       </syntax-highlight>
+    </line-numbers>
+</div>
+    <p>However, that also means that your game won't end with bankruptcy. Not immediately, that is.</p>
+    <h4>Map Phase</h4>
+    <p>This one is currently not implemented in the c code, and as such, I haven't implemented it yet in my version. Essentially, this will draw a map of your kingdom. You will see the amount of marketplaces, cathedrals and such that you have in your possessions. Later implementations of the game featured more elaborate maps, containing only one of each buildings (mill, cathedral, palace, marketplace), and adding more and more extensions with each level.</p>
+    <p>The map also displays a serf that moves north towards the wall of your town. If this serf is hitting that wall, it is time for you to buy new land, signalling that there are more people in your town than land is available.</p>
+    <h4>Public Works Phase</h4>
+    <p>In this phase, the game will allow you to buy new assets for your town, or recruit soldiers. The code is not that interesting, so I decided to use a table to lay down the effects.</p>
+    <table>
+    <thead>
+        <tr>
+        <th>Asset</th>
+        <th>Treasury</th>
+        <th>PublicWorks</th>
+        <th>Clergy</th>
+        <th>Nobles</th>
+        <th>Merchants</th>
+        <th>Serfs</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+        <td>Market</td>
+        <td>-1000</td>
+        <td>+1.0</td>
+        <td></td>
+        <td></td>
+        <td>+5</td>
+        <td></td>
+        </tr>
+        <tr>
+        <td>Mill</td>
+        <td>-2000</td>
+        <td>+0.25</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        </tr>
+        <tr>
+        <td>Palace</td>
+        <td>-3000</td>
+        <td>+0.5</td>
+        <td></td>
+        <td>Random(2)</td>
+        <td></td>
+        <td></td>
+        </tr>
+        <tr>
+        <td>Cathedral</td>
+        <td>-5000</td>
+        <td>+1.0</td>
+        <td>Random(6)</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        </tr>
+        <tr>
+        <td>Soldiers</td>
+        <td>-500</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>-20<sup>a</sup></td>
+        </tr>
+    </tbody>
+    </table>
+    <p><em>a: 20 serfs will be converted to 20 soldiers.</em></p>
+    <p>This concludes all four phases of the game.</p>
+    <h3>Progress calculation</h3>
+    <p>The game will calculate your progression on a large amount of factors. Two functions are important for that:</p>
+<div class="code-block">
+        <line-numbers>
+            <syntax-highlight language="clike">private int Limit10(int num, int denom)
+{
+    int val = num / denom;
+    return (val > 10 ? 10 : val);
+}
+
+private bool CheckNewTitle(Player player)
+{
+    int total = 0;
+    /* Tally up our success so far . . . . */
+    total += Limit10(player.Marketplaces, 1);
+    total += Limit10(player.Palace, 1);
+    total += Limit10(player.Cathedral, 1);
+    total += Limit10(player.Mills, 1);
+    total += Limit10(player.Treasury, 5000);
+    total += Limit10(player.Land, 6000);
+    total += Limit10(player.Merchants, 50);
+    total += Limit10(player.Nobles, 5);
+    total += Limit10(player.Soldiers, 50);
+    total += Limit10(player.Clergy, 10);
+    total += Limit10(player.Serfs, 2000);
+    total += Limit10(Convert.ToInt32(player.PublicWorks * 100.0), 500);
+    player.TitleNum = (total / player.Difficulty) - player.Justice;
+
+    if (player.TitleNum > 7)
+    {
+        player.TitleNum = 7;
+    }
+    
+    if (player.TitleNum < 0)
+    {
+        player.TitleNum = 0;
+    }
+
+    /* Did we change (could be backwards or forwards)? */
+
+    if (player.TitleNum > player.OldTitle)
+    {
+        player.OldTitle = player.TitleNum;
+        ChangeTitle(player);
+        Console.WriteLine();
+        Console.WriteLine("Good news! {0} has achieved the rank of {1}", player.Name, player.Title);
+        Console.WriteLine();
+        return true;
+    }
+
+    //Revert to the old title. You won't loose a rank here.
+    player.TitleNum = player.OldTitle;
+
+    return false;
+}   </syntax-highlight>
+    </line-numbers>
+</div>
+    <p>The game will limit each step from line <b>11</b> to <b>22</b> by ten, using different denominators for each value. In line <b>23</b>, the difficulty that got selected at the beginning of the game is used as a divisor for the result of this operation. A high justice value will furthermore reduce the title progression.</p>
+    <h3>Final steps</h3>
+    <p>The next steps will conclude the current turn. The year will be increased, and compared against the predetermined player's death year. If the year has come, the <code>ImDead</code> function will set the <code>ImDead</code> flag and print a small obituary. If the player has reached the highest title number, the <code>IWon</code> flag is set. In both cases, in a single player game, the game ends.</p>
+<div class="code-block">
+        <line-numbers>
+            <syntax-highlight language="clike">player.Year++;
+if (player.Year == player.YearOfDeath)
+{
+    ImDead(player);
+}
+
+if (player.TitleNum >= 7)
+{
+    player.IWon = true;
+}</syntax-highlight>
+    </line-numbers>
+</div>
+    <h3>Final thoughts</h3>
+    <p>That was more to unpack than I anticipated in the beginning. But it was kind of fun, anyways. The game is surprisingly complex, if you consider it being almost 50 years old (in 2025, at the time of writing).</p>
     </main>
     <footer>
     <x-website-footer></x-website-footer>
