@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "Paravia.Blazor",
   "resources": {
-    "hash": "sha256-BuKAVh1bMW5oKNxnJ0VMbclEl6M5DmFnFiVyGx845k0=",
+    "hash": "sha256-Yd/p8zWOvVMGbFuRH9q1fr1iDNsUW+iPDlwpHIlx634=",
     "fingerprinting": {
       "Microsoft.AspNetCore.Components.d5qyj5c6wb.wasm": "Microsoft.AspNetCore.Components.wasm",
       "Microsoft.AspNetCore.Components.Forms.htnpsp1qm3.wasm": "Microsoft.AspNetCore.Components.Forms.wasm",
@@ -42,9 +42,9 @@
       "System.Threading.acwnquwc9t.wasm": "System.Threading.wasm",
       "System.wznexm8bk2.wasm": "System.wasm",
       "System.Private.CoreLib.znzxvoj32y.wasm": "System.Private.CoreLib.wasm",
-      "Blzr.Console.aj4zkx84ta.wasm": "Blzr.Console.wasm",
+      "Blzr.Console.yq29d2bshp.wasm": "Blzr.Console.wasm",
       "Console.Extensions.vd9ebefa32.wasm": "Console.Extensions.wasm",
-      "Paravia.Blazor.d1ujog02be.wasm": "Paravia.Blazor.wasm",
+      "Paravia.Blazor.tnhb3oirtf.wasm": "Paravia.Blazor.wasm",
       "dotnet.js": "dotnet.js",
       "dotnet.native.st0ovrfdhi.js": "dotnet.native.js",
       "dotnet.native.67rumul467.wasm": "dotnet.native.wasm",
@@ -109,9 +109,9 @@
       "System.Text.RegularExpressions.uppli1il33.wasm": "sha256-cssgrj2fLKJui+a09EbhoMvUEqUJHPWKR47Ri3l887A=",
       "System.Threading.acwnquwc9t.wasm": "sha256-hmq7E5RBDuX9WHoN8bZjejvmxHmSFsAk0rO4O+E/LOg=",
       "System.wznexm8bk2.wasm": "sha256-/Imz/Enqa2AZc4T3k/CqtsM6674KRN9OUtvK4Nokhew=",
-      "Blzr.Console.aj4zkx84ta.wasm": "sha256-tjlv5ZobYwd9ekF+rOm4h/Zhn/MUKFw1UGuYT+h4/IA=",
+      "Blzr.Console.yq29d2bshp.wasm": "sha256-1mRta4js9Oj7ZjHuM1UEV/rEbBaIIae9X4mryf8ps8s=",
       "Console.Extensions.vd9ebefa32.wasm": "sha256-/YUb1QtU74rMweLhraklJcwdBhplSpiZKJXG9UyPROg=",
-      "Paravia.Blazor.d1ujog02be.wasm": "sha256-LwnBIW9kPIvT0/yiTeTVqnO+LySdbLgABqxOjara1ZA="
+      "Paravia.Blazor.tnhb3oirtf.wasm": "sha256-KVG9Gfk3UStCYTJf5Rb+pSxHlRKERspwrWxmiFyAFgY="
     }
   },
   "cacheBootResources": true,
