@@ -175,7 +175,7 @@ input:not([type=submit],
 :root:not([data-theme=dark]),
 :host(:not([data-theme=dark])) {
   color-scheme: light;
-  --pico-background-color: #fff;
+  --pico-background-color: #f1f1f1;
   --pico-color: #373c44;
   --pico-text-selection-color: rgba(2, 154, 232, 0.25);
   --pico-muted-color: #646b79;
