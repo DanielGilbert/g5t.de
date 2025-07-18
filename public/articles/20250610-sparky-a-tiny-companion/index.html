@@ -23,7 +23,7 @@
     </header>
     <main>
         <h2>Sparky - A Tiny Companion</h2>
-        <x-article-metalines published="2025-06-10" updated="2025-07-09" author="Daniel Gilbert"></x-article-metalines>
+        <x-article-metalines published="2025-06-10" updated="2025-07-18" author="Daniel Gilbert"></x-article-metalines>
         <h4>Rubberducking without rubber... or a duck.</h4>
         <p>A while ago, I wanted to go ahead and build some kind of desktop companion. My idea was to create a little, easy to build companion, that could sit on my desk and provide me some kind of company.</p>
         <p>So Sparky was born:</p>
@@ -31,8 +31,7 @@
             <source src="sparky-1.webm" type="video/webm">
             <source src="sparky-1.mp4" type="video/mp4">
             Your browser does not support the video tag.
-        </video><figcaption>Again, still Sparky. Thanks to this video, you now know how she (Or he? They? Your call) looks.</figcaption></figure>
-        <p><s>I will update this article in a few days, to provide some more context.</s></p>
+        </video><figcaption>Again, still Sparky. Thanks to this video, you now know how it looks.</figcaption></figure>
         <p>So, it looks like "in a few days" took a more days than I anticipated. Anyways... The main idea behind Sparky was what is usually referred to as <a href="https://en.wikipedia.org/wiki/Rubber_duck_debugging">rubberducking</a> in programming:</p>
         <blockquote cite="https://en.wikipedia.org/wiki/Rubber_duck_debugging">In software engineering, rubber duck debugging (or rubberducking) is a method of debugging code by articulating a problem in spoken or written natural language. The name is a reference to a story in the book The Pragmatic Programmer in which a programmer would carry around a rubber duck and debug their code by forcing themselves to explain it, line by line, to the duck.</blockquote>
         <p>Source: <cite>Wikipedia</cite></p>
@@ -42,8 +41,8 @@
             <li>An OLED Display (0.95")</li>
             <li>MPU 6050 (Six-Axis motion tracking)</li>
         </ul>
-        <p>This combination allows for some neat features, which I all have in my mind but not yet implemented. Once thing that is already implemented. Sparky will, however, go to sleep once it does not recognize any activity on the desk. The sensor is really sensitiv and registers typing on the keyboard while Sparky is standing on the desk.</p>
-        <p>At the moment, Sparky only does this random blinking and looking around, but eventually, I plan to integrate more features, like being able to register touches (there are 3 screws on top - they are wired to the touch input of the ESP32) and register when being picked up. I also would love to see more expressions. I even consider putting everything in a bigger shell by using a bigger OLED Display, so that I can add a loudspeaker and use it as a replacement for my smart home voice assistant (aka Alexa).</p>
+        <p>This combination allows for some neat features, which I all have in my mind but not yet implemented. One thing that is already implemented: Sparky will go to sleep once it does not recognize any activity on the desk. The sensor is really sensitiv and registers typing on the keyboard while Sparky is standing on the desk.</p>
+        <p>At the moment, Sparky only does this random blinking and looking around, but eventually, I plan to integrate more features, like being able to register touches (there are 3 screws on top - they are wired to the touch input of the ESP32) and register when being picked up. I also would love to see more expressions. I even consider putting everything in a bigger shell by using a bigger OLED Display, so that I can add a loudspeaker and use it as a replacement for my smart home voice assistant (aka Alexa). That might be a project for the winter.</p>
     </main>
     <footer>
     <x-website-footer></x-website-footer>
