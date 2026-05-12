@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Generate feed.xml</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <p><button id="download">Download feed.xml</button></p>
+    <script type="module">
+        import { articles } from './articles.js';
+
+        document.getElementById('download').addEventListener('click', () => {
+            const siteUrl = 'https://g5t.de';
+            const base = siteUrl + '/articles/index.html';
+
+            const entries = articles.map(a => {
+                const url = new URL(a.href, base).href;
+                return `  <entry>
+    <title>${x(a.title)}</title>
+    <link href="${url}"/>
+    <id>${url}</id>
+    <updated>${a.published}T00:00:00Z</updated>
+    <summary>${x(a.description)}</summary>
+  </entry>`;
+            }).join('\n');
+
+            const feed = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>g5t.de</title>
+  <link href="${siteUrl}/feed.xml" rel="self"/>
+  <link href="${siteUrl}/"/>
+  <updated>${articles[0].published}T00:00:00Z</updated>
+  <id>${siteUrl}/</id>
+  <author><name>Daniel Gilbert</name></author>
+${entries}
+</feed>`;
+
+            const blob = new Blob([feed], { type: 'application/xml' });
+            const a = Object.assign(document.createElement('a'), {
+                href: URL.createObjectURL(blob),
+                download: 'feed.xml'
+            });
+            a.click();
+        });
+
+        function x(s) {
+            return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+    </script>
+</body>
+</html>
