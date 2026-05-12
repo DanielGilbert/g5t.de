@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>g5t.de</title>
+  <link href="https://g5t.de/feed.xml" rel="self"/>
+  <link href="https://g5t.de/"/>
+  <updated>2026-05-10T00:00:00Z</updated>
+  <id>https://g5t.de/</id>
+  <author><name>Daniel Gilbert</name></author>
+  <entry>
+    <title>Task Paralysis &amp; AI</title>
+    <link href="https://g5t.de/articles/20260510-task-paralysis-and-ai/index.html"/>
+    <id>https://g5t.de/articles/20260510-task-paralysis-and-ai/index.html</id>
+    <updated>2026-05-10T00:00:00Z</updated>
+    <summary>An article about ADHD, Task Paralysis and AI.</summary>
+  </entry>
+  <entry>
+    <title>Santa Paravia en Fiumaccio in C#</title>
+    <link href="https://g5t.de/articles/20250709-santa-paravia/index.html"/>
+    <id>https://g5t.de/articles/20250709-santa-paravia/index.html</id>
+    <updated>2025-07-09T00:00:00Z</updated>
+    <summary>An article about a very old game in a modern language.</summary>
+  </entry>
+  <entry>
+    <title>Sparky - A Tiny Companion</title>
+    <link href="https://g5t.de/articles/20250610-sparky-a-tiny-companion/index.html"/>
+    <id>https://g5t.de/articles/20250610-sparky-a-tiny-companion/index.html</id>
+    <updated>2025-06-10T00:00:00Z</updated>
+    <summary>An article about Sparky, a small desk companion.</summary>
+  </entry>
+  <entry>
+    <title>Rebuild the Website</title>
+    <link href="https://g5t.de/articles/20250518-rebuild-the-website/index.html"/>
+    <id>https://g5t.de/articles/20250518-rebuild-the-website/index.html</id>
+    <updated>2025-05-18T00:00:00Z</updated>
+    <summary>An article about the website.</summary>
+  </entry>
+</feed>
