@@ -4,7 +4,7 @@ class WebsiteFooter extends HTMLElement {
     connectedCallback() {
         this.innerHTML = html`
             <small class="contact">
-                <span>&copy; Daniel Gilbert, 2020 &dash; 2026</span>&NonBreakingSpace;|&NonBreakingSpace;<span>Made with ❤ &amp; ☕</span>&NonBreakingSpace;|&NonBreakingSpace;<a href="https://github.com/danielgilbert/">GitHub</a>
+                <span>&copy; Daniel Gilbert, 2020 &dash; 2026</span>&NonBreakingSpace;|&NonBreakingSpace;<span>Made with ❤ &amp; ☕</span>&NonBreakingSpace;|&NonBreakingSpace;<a href="https://github.com/danielgilbert/">GitHub</a>&NonBreakingSpace;|&NonBreakingSpace;<a href="https://g5t.de/feed.xml">Atom-/RSS-Feed</a>
             </small>
         `;
     }
