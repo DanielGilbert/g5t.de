@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Sudoku Generator | g5t.de</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="Generate a printable PDF full of Sudoku puzzles, ready for DIN A4 paper, with an optional solutions page - all in your browser, nothing is uploaded.">
+    <link rel="icon" href="./../../favicon.ico">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="stylesheet" href="./../index.css">
+    <link rel="canonical" href="https://g5t.de/tools/sudoku-generator/index.html" />
+    <link rel="alternate" type="application/atom+xml" title="g5t.de" href="https://g5t.de/feed.xml" />
+</head>
+<body class="container">
+    <header>
+        <h1>g[ilber]t.de</h1>
+        <nav>
+            <ul>
+                <li><a href="../../">Welcome</a></li>
+                <li><a href="../../articles/">Articles</a></li>
+                <li><a href="../../tools/">Tools</a></li>
+                <li><a href="../../games/">Games</a></li>
+                <li><a href="../../music/">Music</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Sudoku Generator</h2>
+            <p><em>Create a printable PDF full of Sudoku puzzles for DIN A4 paper.</em></p>
+
+            <p>Pick how many puzzles you want, how hard they should be and how many
+            fit on a page, then generate a ready-to-print PDF. Everything runs
+            in your browser - no puzzle ever leaves your device.</p>
+
+            <form id="sudoku-form">
+                <div class="grid">
+                    <label>
+                        Number of puzzles
+                        <input type="number" id="count" name="count" min="1" max="40" value="4" required>
+                    </label>
+                    <label>
+                        Difficulty
+                        <select id="difficulty" name="difficulty">
+                            <option value="easy">Easy</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="hard">Hard</option>
+                            <option value="very-hard">Very Hard</option>
+                            <option value="insane">Insane</option>
+                            <option value="inhuman">Inhuman</option>
+                        </select>
+                    </label>
+                    <label>
+                        Puzzles per page
+                        <select id="perPage" name="perPage">
+                            <option value="1">1</option>
+                            <option value="2" selected>2</option>
+                            <option value="4">4</option>
+                        </select>
+                    </label>
+                </div>
+                <label>
+                    <input type="checkbox" id="includeSolutions" name="includeSolutions" checked>
+                    Include a solutions section at the end
+                </label>
+                <button type="submit">Generate PDF</button>
+                <p id="status" role="status" aria-live="polite"></p>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <x-website-footer></x-website-footer>
+    </footer>
+
+    <script src="./libs/sudoku.js"></script>
+    <script src="./libs/jspdf.umd.min.js"></script>
+    <script type="module" src="./index.js"></script>
+</body>
+</html>
